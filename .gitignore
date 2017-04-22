@@ -45,6 +45,8 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
+#SE450 Project Specific
+Examples/
 
 # OS
 .DS_Store
