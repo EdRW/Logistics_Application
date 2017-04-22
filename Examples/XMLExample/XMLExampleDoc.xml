@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BookStoreContent>
+    
+    <Store Id="102">
+        <Name>Janets's Books</Name>
+        <Address>123 4th St, Some City, NA 12345</Address>
+        <Book>
+            <Title>Java is Fun</Title>
+            <Author>George Glass</Author>
+            <Date>2014</Date>
+            <ISBN13>1928573462534</ISBN13>
+        </Book>
+        <Book>
+            <Title>Learn to Program</Title>
+            <Author>Alice Masters</Author>
+            <Date>2011</Date>
+            <ISBN13>8273645392864</ISBN13>
+        </Book>
+        <Book>
+            <Title>XML is Xciting</Title>
+            <Author>Sheldon Cooper</Author>
+            <Date>2015</Date>
+            <ISBN13>98765348987645</ISBN13>
+        </Book>
+    </Store>
+    
+    <Store Id="116">
+        <Name>Tech Books Unlimited</Name>
+        <Address>123 Smith St., Other City, OS, 34567</Address>
+        <Book>
+            <Title>Modern Java</Title>
+            <Author>A. Ruba</Author>
+            <Date>2015</Date>
+            <ISBN13>9876537498712</ISBN13>
+        </Book>
+    </Store>
+    
+    <Store Id="141">
+        <Name>Books and Bytes</Name>
+        <Address>123S12 Westmere Dr, Some Place, SP, 25890</Address>
+         <Book>
+            <Title>Joyful Java</Title>
+            <Author>Amy Pond</Author>
+            <Date>2012</Date>
+            <ISBN13>8376807348976</ISBN13>
+        </Book>
+        <Book>
+            <Title>Windows 10 for Programmers</Title>
+            <Author>Nicola Tesla</Author>
+            <Date>2015</Date>
+            <ISBN13>0987698763567</ISBN13>
+        </Book>
+    </Store>
+    
+</BookStoreContent>

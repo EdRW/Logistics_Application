@@ -1,0 +1,38 @@
+1) Create a valid Automobile, and print out the toString summary
+SUCCESS: Automobile Make: Ford, Model:  Focus, Current Speed: 37.4, Max Speed:  112.8, Current Location: (13, 47)
+
+2) Try to create an Automobile with a null Make
+SUCCESS (Trapped the Error): Null String passed into Automobile.setMake(String)
+
+3) Try to create an Automobile with an empty Make
+SUCCESS (Trapped the Error): Empty String passed into Automobile.setMake(String)
+
+4) Try to create an Automobile with a null Model
+SUCCESS (Trapped the Error): Null String passed into Automobile.setModel(String)
+
+5) Try to create an Automobile with an empty Model
+SUCCESS (Trapped the Error): Empty String passed into Automobile.setModel(String)
+
+6) Try to create an Automobile with a negative Max Speed
+SUCCESS (Trapped the Error): Invalid Max. Speed value passed into Automobile.setMaxSpeed(double): -112.8
+
+7) Try to create an Automobile with a negative Speed
+SUCCESS (Trapped the Error): Negative passed into Automobile.setSpeed(double): -37.4
+
+8) Try to create an Automobile with a Speed greated than the Max Speed
+SUCCESS (Trapped the Error): Speed greater than Max Speed passed into Automobile.setSpeed(double): 137.4
+
+9) Try to create an Automobile with a null Location
+SUCCESS (Trapped the Error): Null Location Point passed into Automobile.setLocation(Point)
+
+10) Change the Speed of an existing Automobile to a valid value
+Before Change: Automobile Make: Ford, Model:  Focus, Current Speed: 37.4, Max Speed:  112.8, Current Location: (13, 47)
+SUCCESS (Trapped the Error): Automobile Make: Ford, Model:  Focus, Current Speed: 55.0, Max Speed:  112.8, Current Location: (13, 47)
+
+11) Change the Speed of an existing Automobile to an invalid value
+Before Change: Automobile Make: Ford, Model:  Focus, Current Speed: 37.4, Max Speed:  112.8, Current Location: (13, 47)
+SUCCESS (Trapped the Error): Speed greater than Max Speed passed into Automobile.setSpeed(double): 155.0
+
+12) Change the Location of an existing Automobile to a null Point
+Before Change: Automobile Make: Ford, Model:  Focus, Current Speed: 37.4, Max Speed:  112.8, Current Location: (13, 47)
+SUCCESS (Trapped the Error): Null Location Point passed into Automobile.setLocation(Point)
