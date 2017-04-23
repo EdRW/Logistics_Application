@@ -23,6 +23,7 @@
  */
 package logisticsapplication;
 
+import XMLReaders.FacilityInventoryReader;
 import XMLReaders.ItemCatalogReader;
 import XMLReaders.TransportNetworkReader;
 
@@ -38,7 +39,10 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         ItemCatalogReader.loadPrint();
+        System.out.println("-----------------------------------------\n");
         TransportNetworkReader.loadPrint();
+        System.out.println("-----------------------------------------\n");
+        FacilityInventoryReader.loadPrint();
     }
     
 }

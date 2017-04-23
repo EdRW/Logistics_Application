@@ -25,6 +25,7 @@ package XMLReaders;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,53 +40,73 @@ import org.xml.sax.SAXException;
  *
  * @author Edmund Wright and Camille Rose
  */
-public class ItemCatalogReader {
-    /*
+public class FacilityInventoryReader {
+         /*
      * TODO This is a temporary method that should be reworked
-     * to load XML and return a list of item objects
+     * to load XML and return a list of facility inventory objects
      */
     public static void loadPrint(){
         try {
-            String fileName = "src\\XMLReaders\\ItemCatalog.xml";
-            
+            String fileName = "src\\XMLReaders\\FacilityInventory.xml";
+
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            
+
             File xml = new File(fileName);
             if (!xml.exists()) {
                 System.err.println("**** XML File '" + fileName + "' cannot be found");
                 System.exit(-1);
             }
-            
+
             Document doc = db.parse(xml);
             doc.getDocumentElement().normalize();
             
-            NodeList itemEntries = doc.getDocumentElement().getChildNodes();
+            NodeList facilityEntries = doc.getDocumentElement().getChildNodes();
             
-            for (int i = 0; i < itemEntries.getLength(); i++) {
-                if (itemEntries.item(i).getNodeType() == Node.TEXT_NODE) {
+            for (int i = 0; i < facilityEntries.getLength(); i++) {
+                if (facilityEntries.item(i).getNodeType() == Node.TEXT_NODE) {
                     continue;
                 }
                 
-                String entryName = itemEntries.item(i).getNodeName();
-                if (!entryName.equals("Item")) {
+                String entryName = facilityEntries.item(i).getNodeName();
+                if (!entryName.equals("Facility")) {
                     System.err.println("Unexpected node found: " + entryName);
                     return;
                 }
                 
                 // Get named nodes
-                Element elem = (Element) itemEntries.item(i);
-                String itemName = elem.getElementsByTagName("ID").item(0).getTextContent();
-                String itemPrice = elem.getElementsByTagName("Price").item(0).getTextContent();
+                Element elem = (Element) facilityEntries.item(i);
+                String facilityName = elem.getElementsByTagName("Name").item(0).getTextContent();
+
                 
-                /*
-                 * TODO This where we should start filling the ItemCatelog object.
-                 * Right now it just prints out each item for troubleshooting.
-                 */
-                System.out.println("Item Name: " + itemName + " Item Price: $" + itemPrice);
+                // This line is just here so we have something to print while troubleshooting
+                ArrayList<String> itemDescriptions = new ArrayList<>();
+                // Get all noded named "Item" - there can be 0 or more
+                NodeList itemList = elem.getElementsByTagName("Item");
+                
+                for (int j = 0; j < itemList.getLength(); j++) {
+                    if(itemList.item(j).getNodeType() == Node.TEXT_NODE) {
+                        continue;
+                    }
+                    
+                    entryName = itemList.item(j).getNodeName();
+                    if (!entryName.equals("Item")) {
+                        System.err.println("Unexpected node found: " + entryName);
+                        return;
+                    }
+                    
+                    // Get named nodes
+                    elem = (Element) itemList.item(j);
+                    String itemID = elem.getElementsByTagName("ID").item(0).getTextContent();
+                    String itemQuant = elem.getElementsByTagName("Quantity").item(0).getTextContent();
+                    
+                    itemDescriptions.add("(ID: "+ itemID + ", Quantity: " + itemQuant + ")");
+                }
+                System.out.println("Facility: " + facilityName + "\nItems: " + itemDescriptions + "\n");
             }
             
-        } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
+
+        }catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
             e.printStackTrace();
         }
     }
