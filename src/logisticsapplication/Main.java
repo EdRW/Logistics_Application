@@ -23,6 +23,8 @@
  */
 package logisticsapplication;
 
+import XMLReaders.ItemCatalogReader;
+
 /**
  *
  * @author Edmund Wright and Camille Rose
@@ -34,6 +36,7 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        ItemCatalogReader.loadPrint();
     }
     
 }
