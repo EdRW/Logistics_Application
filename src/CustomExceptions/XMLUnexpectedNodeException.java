@@ -21,29 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package logisticsapplication;
-
-import ItemCatalog.ItemCatalog;
-import XMLReaders.FacilityInventoryReader;
-import XMLReaders.TransportNetworkReader;
+package CustomExceptions;
 
 /**
  *
  * @author Edmund Wright and Camille Rose
  */
-public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        ItemCatalog ic = ItemCatalog.getInstance();
-        ic.printReport();
-        //System.out.println("-----------------------------------------\n");
-        //TransportNetworkReader.loadPrint();
-        //System.out.println("-----------------------------------------\n");
-        //FacilityInventoryReader.loadPrint();
+public class XMLUnexpectedNodeException extends Exception{
+    public XMLUnexpectedNodeException(String msg) {
+        super(msg);
     }
-    
 }

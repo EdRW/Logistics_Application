@@ -23,8 +23,11 @@
  */
 package XMLReaders;
 
+import CustomExceptions.XMLFileNotFoundException;
+import CustomExceptions.XMLUnexpectedNodeException;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,11 +43,9 @@ import org.xml.sax.SAXException;
  * @author Edmund Wright and Camille Rose
  */
 public class ItemCatalogReader {
-    /*
-     * TODO This is a temporary method that should be reworked
-     * to load XML and return a list of item objects
-     */
-    public static void loadPrint(){
+    
+    // Reads the XML file and returns a hashmap of item IDs and prices
+    public static HashMap<String, Integer> load() {
         try {
             String fileName = "src\\XMLReaders\\ItemCatalog.xml";
             
@@ -53,14 +54,15 @@ public class ItemCatalogReader {
             
             File xml = new File(fileName);
             if (!xml.exists()) {
-                System.err.println("**** XML File '" + fileName + "' cannot be found");
-                System.exit(-1);
+                throw new XMLFileNotFoundException("**** XML File '" + fileName + "' cannot be found");
             }
             
             Document doc = db.parse(xml);
             doc.getDocumentElement().normalize();
             
             NodeList itemEntries = doc.getDocumentElement().getChildNodes();
+            
+            HashMap<String, Integer> items = new HashMap<>();
             
             for (int i = 0; i < itemEntries.getLength(); i++) {
                 if (itemEntries.item(i).getNodeType() == Node.TEXT_NODE) {
@@ -69,8 +71,7 @@ public class ItemCatalogReader {
                 
                 String entryName = itemEntries.item(i).getNodeName();
                 if (!entryName.equals("Item")) {
-                    System.err.println("Unexpected node found: " + entryName);
-                    return;
+                    throw new XMLUnexpectedNodeException("Unexpected node found: " + entryName);
                 }
                 
                 // Get named nodes
@@ -78,15 +79,15 @@ public class ItemCatalogReader {
                 String itemName = elem.getElementsByTagName("ID").item(0).getTextContent();
                 String itemPrice = elem.getElementsByTagName("Price").item(0).getTextContent();
                 
-                /*
-                 * TODO This where we should start filling the ItemCatelog object.
-                 * Right now it just prints out each item for troubleshooting.
-                 */
-                System.out.println("Item Name: " + itemName + " Item Price: $" + itemPrice);
+                items.put(itemName, Integer.parseInt(itemPrice));
+                
+                //System.out.println("Item Name: " + itemName + " Item Price: $" + itemPrice);
             }
-            
-        } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
+            return items;
+        } catch (XMLFileNotFoundException | XMLUnexpectedNodeException | ParserConfigurationException | SAXException | IOException | DOMException e) {
             e.printStackTrace();
+            // TODO returning null seems like a bad idea. Not sure what to do...
+            return null;
         }
     }
 }
