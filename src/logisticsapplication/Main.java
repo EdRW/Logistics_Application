@@ -23,10 +23,10 @@
  */
 package logisticsapplication;
 
-import ItemCatalog.ItemCatalog;
+import itemcatalog.ItemCatalog;
 import ShortestPathProcessor.ShortestPathProcessor;
-import XMLReaders.FacilityInventoryReader;
-import XMLReaders.TransportNetworkReader;
+import xmlreaders.FacilityInventoryReader;
+import xmlreaders.TransportNetworkReader;
 
 /**
  *
