@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package FacilityManager;
+package facilitymanager;
 
 import java.util.ArrayList;
 
@@ -52,6 +52,7 @@ public class FacilityManager {
         return instance;
     }
     
+    //TODO let the shortest path processor handle this
     public float getDistance(String facilityA, String facilityB) {
         // TODO this method does nothing. Put code here.
         return 0.0f;

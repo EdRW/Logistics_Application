@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package XMLReaders;
+package xmlreaders;
 
-import CustomExceptions.XMLFileNotFoundException;
-import CustomExceptions.XMLUnexpectedNodeException;
+import customexceptions.XMLFileNotFoundException;
+import customexceptions.XMLUnexpectedNodeException;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

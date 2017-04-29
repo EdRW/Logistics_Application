@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ItemCatalog;
+package itemcatalog;
 
-import XMLReaders.ItemCatalogReader;
+import xmlreaders.ItemCatalogReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -45,7 +45,7 @@ public class ItemCatalog {
          * ItemCatalog instance object.
          * Or maybe add nothing here. Not sure.
          */
-        this.items = ItemCatalogReader.load();
+        items = ItemCatalogReader.load();
     }
     
     public static ItemCatalog getInstance() {
@@ -69,7 +69,7 @@ public class ItemCatalog {
         // TODO this method does nothing. Put code here.
         // loop through the hashmap and print each item and price
         System.out.println("---------------------\nItem Catalog Content:\n---------------------");
-        Map<String, Integer> sortedItems = new TreeMap<>(this.items);
+        Map<String, Integer> sortedItems = new TreeMap<>(items);
         for (String ID : sortedItems.keySet()) {
             //System.out.println(ID + " : " + Float.toString(items.get(ID)));
             System.out.printf("%-10s: $%d\n", ID, sortedItems.get(ID));
