@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Edmund Wright and Camille Rose.
+ * Copyright 2017 Camille.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,31 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package logisticsapplication;
-
-import ItemCatalog.ItemCatalog;
-import ShortestPathProcessor.ShortestPathProcessor;
-import XMLReaders.FacilityInventoryReader;
-import XMLReaders.TransportNetworkReader;
+package ShortestPathProcessor;
 
 /**
  *
- * @author Edmund Wright and Camille Rose
+ * @author Camille
  */
-public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        //ItemCatalog ic = ItemCatalog.getInstance();
-        //ic.printReport();
-        //System.out.println("-----------------------------------------\n");
-        //TransportNetworkReader.loadPrint();
-        //System.out.println("-----------------------------------------\n");
-        //FacilityInventoryReader.loadPrint();
-        ShortestPathProcessor.ShortestPathProcessor();
+public class ShortestPathProcessor {
+    public static ShortestPathProcessor instance = new ShortestPathProcessor();
+    
+    public static void ShortestPathProcessor () {
+        System.out.println("This is a test of the ShortestPathProcessor");
     }
     
+    public static ShortestPathProcessor getInstance() {
+        if(instance == null) {
+            instance = new ShortestPathProcessor();
+        }
+        return instance;
+    }
 }
