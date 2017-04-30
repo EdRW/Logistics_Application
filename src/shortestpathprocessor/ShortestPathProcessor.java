@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Camille.
+ * Copyright 2017 Camille Rose and Edmund Wright.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,16 +29,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 /**
  *
- * @author Camille
+ * @author Camille Rose and Edmund Wright
  */
 public class ShortestPathProcessor {
-    public static ShortestPathProcessor instance = new ShortestPathProcessor();
+    private static ShortestPathProcessor instance;
     
     // this is used in mapPairs to map the pairs whoo
     HashMap<String,Integer> pairs = new HashMap<>();
     // seen is used to fill up mapPairs
-    HashSet seen = new HashSet();
-    ArrayList lowPath = new ArrayList();
+    HashSet<String> seen = new HashSet<>();
+    ArrayList<String> lowPath = new ArrayList<>();
             
             
     private ShortestPathProcessor () {
@@ -57,9 +57,12 @@ public class ShortestPathProcessor {
     public void findBestPath(String start, String end) {
         // TODO parameters are start,end
         mapPairs(start);
-        
-        //ArrayList pathList = new ArrayList();
+        ArrayList<String> pathList = new ArrayList<>();
         // add start to ArrayList
+        pathList.add(start);
+        findPaths(start, end, pathList);
+        // return lowPath
+        
     }
     
     private void mapPairs(String start) {
@@ -74,7 +77,7 @@ public class ShortestPathProcessor {
         HashMap<String, Integer> neighbors = facilityManager.getNeighbors(start);
         for (String neighborName : neighbors.keySet()) {
             // decide which string comes first-
-            String newPair = (start.compareTo(neighborName) == -1) ? start.concat(neighborName) : neighborName.concat(start);
+            String newPair = (start.compareTo(neighborName) == -1) ? start.concat(";"+neighborName) : neighborName.concat(";"+start);
             pairs.put(newPair,neighbors.get(neighborName));
             if (seen.contains(neighborName) == false) {
                 mapPairs(neighborName);
@@ -84,10 +87,54 @@ public class ShortestPathProcessor {
         
     }
     
-    private void findPaths(String start, String end, ArrayList pathList) {
+    private void findPaths(String start, String end, ArrayList<String> pathList) {
         // pass start, end, and pathList
         // there is a special case for when start equals end
-        // HashSet fromHere = new HashSet();
+        if (start == null ? end == null : start.equals(end)) {
+            if (lowPath.isEmpty()) {
+                lowPath = pathList;
+            }
+            else {
+                // sum the length of miles of "pathList"
+                int sum = 0;
+                for (String pair : pairs.keySet()) {
+                    for (String path : pathList) {
+                        if (pair.contains(path)) {
+                            sum += pairs.get(pair);
+                        }
+                    }
+                 }
+                    // get distance from pairs
+                // if sum < length of lowPath
+                if (sum < lowPath.size()) {
+                    lowPath = pathList;
+                }
+            }
+        } else {
+            HashSet<String> fromHere = new HashSet<>();
+            // for each pairing in "pairs" HashSet
+            for (String pair : pairs.keySet()) {
+                 // does the first node in the pair equal start?
+                    // if yes, add the pair to the fromHere HashSet
+                if (pair.contains(start)) {
+                    fromHere.add(pair);
+                }
+                // for each pairing in from Here HashSet
+                for (String pairing : fromHere) {
+                    // does pathList contain the second node in the pair?
+                    if (!pathList.contains(pairing)) {
+                        // if no, ArrayList<String> = a copy of pathList
+                        ArrayList<String> newPath = new ArrayList<>(pathList);
+                        // ArrayList<String> splitPairs = new ArrayList<>(pairing.split(";"));
+                        
+                         // add second node in current pair to newPath
+
+                        
+                    }
+                }
+            }
+                                // recursive call findPaths on second node in pair, end, newPath
+        }
         // fill fromHere with pairs containing the starting facility
         // recursive call
     }
