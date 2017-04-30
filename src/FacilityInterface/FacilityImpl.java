@@ -30,20 +30,38 @@ import java.util.HashMap;
  * @author Edmund Wright and Camille Rose
  */
 public class FacilityImpl implements Facility{
-    private String name;
-    private int rate;
-    private float cost;
-    private HashMap<String, Integer> neighbors;
+    private final String facilityName;
+    private final int facilityRate;
+    private final int facilityCost;
+    private final HashMap<String, Integer> facilityNeighbors;
     //Inventory Object
     //Schedule Object
     
+    FacilityImpl(String name, int rate, int cost, HashMap<String, Integer> neighbors){
+        // TODO add parameter error checking
+        facilityName = name;
+        facilityRate = rate;
+        facilityCost = cost;
+        facilityNeighbors = neighbors;
+    }
+    
     @Override
     public void printReport(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("----------------------------------------------------------------------------------");
+        System.out.println(facilityName);
+        System.out.println("-------");
+        System.out.println("Rate per Day: " + facilityRate + "\nCost per Day: $"+ facilityCost + "\n");
+        
+        System.out.println("Direct Links:");
+        for (String name : facilityNeighbors.keySet() ){
+            System.out.printf(name + " (%.1fd); ", facilityNeighbors.get(name)/450.0f);
+        }
+        System.out.println("\n");
     }
 
     @Override
     public HashMap<String, Integer> getNeighbors() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new HashMap<>(facilityNeighbors);
     }
 }

@@ -23,15 +23,19 @@
  */
 package xmlreaders;
 
+import customexceptions.XMLFileNotFoundException;
+import customexceptions.XMLUnexpectedNodeException;
 import facilityinterface.Facility;
+import facilityinterface.FacilityImplFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+//import java.util.ArrayList;
+import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.DOMException;
+//import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -48,71 +52,71 @@ public class TransportNetworkReader {
      * TODO This is a temporary method that should be reworked
      * to load XML and return a list of facility objects
      */
-    public static void loadPrint(){
-        try {
-            String fileName = "src\\XMLReaders\\TransportNetwork.xml";
+    public static HashMap<String, Facility> load() throws XMLFileNotFoundException, XMLUnexpectedNodeException, SAXException, IOException, ParserConfigurationException{
 
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
+        String fileName = "src\\XMLReaders\\TransportNetwork.xml";
 
-            File xml = new File(fileName);
-            if (!xml.exists()) {
-                System.err.println("**** XML File '" + fileName + "' cannot be found");
-                System.exit(-1);
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+
+        File xml = new File(fileName);
+        if (!xml.exists()) {
+            throw new XMLFileNotFoundException("**** XML File '" + fileName + "' cannot be found");
+        }
+
+        Document doc = db.parse(xml);
+        doc.getDocumentElement().normalize();
+
+        NodeList facilityEntries = doc.getDocumentElement().getChildNodes();
+
+        HashMap<String, Facility> facilityMap = new HashMap<>();
+
+        for (int i = 0; i < facilityEntries.getLength(); i++) {
+            if (facilityEntries.item(i).getNodeType() == Node.TEXT_NODE) {
+                continue;
             }
 
-            Document doc = db.parse(xml);
-            doc.getDocumentElement().normalize();
-            
-            NodeList facilityEntries = doc.getDocumentElement().getChildNodes();
-            
-            for (int i = 0; i < facilityEntries.getLength(); i++) {
-                if (facilityEntries.item(i).getNodeType() == Node.TEXT_NODE) {
+            String entryName = facilityEntries.item(i).getNodeName();
+            if (!entryName.equals("Facility")) {
+                throw new XMLUnexpectedNodeException("Unexpected node found: " + entryName);
+            }
+
+            // Get named nodes
+            Element elem = (Element) facilityEntries.item(i);
+            String facilityName = elem.getElementsByTagName("Name").item(0).getTextContent();
+            String facilityRate = elem.getElementsByTagName("Rate").item(0).getTextContent();
+            String facilityCost = elem.getElementsByTagName("Cost").item(0).getTextContent();
+
+            // This line is just here so we have something to print while troubleshooting
+            //ArrayList<String> neighborDescriptions = new ArrayList<>();
+            // Get all noded named "Neighbor" - there can be 0 or more
+            NodeList neighborList = elem.getElementsByTagName("Neighbor");
+
+            HashMap<String, Integer> neighborMap = new HashMap<>();
+
+            for (int j = 0; j < neighborList.getLength(); j++) {
+                if(neighborList.item(j).getNodeType() == Node.TEXT_NODE) {
                     continue;
                 }
-                
-                String entryName = facilityEntries.item(i).getNodeName();
-                if (!entryName.equals("Facility")) {
-                    System.err.println("Unexpected node found: " + entryName);
-                    return;
-                }
-                
-                // Get named nodes
-                Element elem = (Element) facilityEntries.item(i);
-                String facilityName = elem.getElementsByTagName("Name").item(0).getTextContent();
-                String facilityRate = elem.getElementsByTagName("Rate").item(0).getTextContent();
-                String facilityCost = elem.getElementsByTagName("Cost").item(0).getTextContent();
-                
-                // This line is just here so we have something to print while troubleshooting
-                ArrayList<String> neighborDescriptions = new ArrayList<>();
-                // Get all noded named "Neighbor" - there can be 0 or more
-                NodeList neighborList = elem.getElementsByTagName("Neighbor");
-                
-                for (int j = 0; j < neighborList.getLength(); j++) {
-                    if(neighborList.item(j).getNodeType() == Node.TEXT_NODE) {
-                        continue;
-                    }
-                    
-                    entryName = neighborList.item(j).getNodeName();
-                    if (!entryName.equals("Neighbor")) {
-                        System.err.println("Unexpected node found: " + entryName);
-                        return;
-                    }
-                    
-                    // Get named nodes
-                    elem = (Element) neighborList.item(j);
-                    String neighborName = elem.getElementsByTagName("Name").item(0).getTextContent();
-                    String neighborDist = elem.getElementsByTagName("Distance").item(0).getTextContent();
-                    
-                    neighborDescriptions.add("(Name: "+ neighborName + ", Distance: " + neighborDist + ")");
-                }
-                System.out.println("Facility: " + facilityName + "\nRate: " + facilityRate + "\nCost: " + facilityCost + "\nNeighbors: " + neighborDescriptions + "\n");
-            }
-            
 
-        }catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
-            e.printStackTrace();
+                entryName = neighborList.item(j).getNodeName();
+                if (!entryName.equals("Neighbor")) {
+                    throw new XMLUnexpectedNodeException("Unexpected node found: " + entryName);
+                }
+
+                // Get named nodes
+                elem = (Element) neighborList.item(j);
+                String neighborName = elem.getElementsByTagName("Name").item(0).getTextContent();
+                String neighborDist = elem.getElementsByTagName("Distance").item(0).getTextContent();
+
+                //neighborDescriptions.add("(Name: "+ neighborName + ", Distance: " + neighborDist + ")");
+                neighborMap.put(neighborName, Integer.parseInt(neighborDist));
+            }
+            //System.out.println("Facility: " + facilityName + "\nRate: " + facilityRate + "\nCost: " + facilityCost + "\nNeighbors: " + neighborDescriptions + "\n");
+            facilityMap.put(facilityName, FacilityImplFactory.build(facilityName, Integer.parseInt(facilityRate), Integer.parseInt(facilityCost), neighborMap));
         }
+        return facilityMap;
+            
     }
     
 }

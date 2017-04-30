@@ -23,6 +23,8 @@
  */
 package facilityinterface;
 
+import java.util.HashMap;
+
 
 /**
  *
@@ -33,8 +35,8 @@ public class FacilityImplFactory {
     /* Creates Facility Impls. There is only one type of Facility
      * at this time. That type is ManufacturingFacilityImpl.
      */
-    public static Facility build(){
-        return new FacilityImpl();
+    public static Facility build(String name, int rate, int cost, HashMap<String, Integer> neighbors){
+        return new FacilityImpl(name, rate, cost, neighbors);
     }
     
     /* Updates Facility Impls. There is only one type of Facility

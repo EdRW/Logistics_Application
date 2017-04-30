@@ -23,7 +23,16 @@
  */
 package facilitymanager;
 
+import customexceptions.XMLFileNotFoundException;
+import customexceptions.XMLUnexpectedNodeException;
+import facilityinterface.Facility;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
+import xmlreaders.TransportNetworkReader;
 
 /**
  *
@@ -33,16 +42,18 @@ public class FacilityManager {
     // This class uses singleton design pattern
     private static FacilityManager instance = new FacilityManager();
     
+    private HashMap<String, Facility> facilityNetwork;
+    
     // TODO create a private hashmap that holds a String with facility name and reference to facility obj
     
     // TODO create a private hashmap that holds pairs of facility names and the distance between them
     
     private FacilityManager() {
-        /*
-         * add the Transport Network reader in here to build
-         * Facility Manager instance object.
-         * Or maybe add nothing here. Not sure.
-         */
+        try{
+            facilityNetwork = TransportNetworkReader.load();
+        } catch (XMLFileNotFoundException | XMLUnexpectedNodeException | ParserConfigurationException | SAXException | IOException | DOMException e){
+            e.printStackTrace(System.out);
+        }
     }
     
     public static FacilityManager getInstance() {
@@ -58,13 +69,18 @@ public class FacilityManager {
         return 0.0f;
     }
     
-    public ArrayList<String> getNeighbors(String facility) {
+    public HashMap<String, Integer> getNeighbors(String facilityName) {
          // TODO this method does nothing. Put code here.
-        return new ArrayList<>();
+        return facilityNetwork.get(facilityName).getNeighbors();
     }
     
     public void printReport() {
-        // TODO this method does nothing. Put code here.
-        // loop through the hashmap and print each facility's report
+        System.out.println("----------------------------------------------------------------------------------");
+        System.out.println("FACILITY STATUS REPORT");
+        
+        // loop through the hashmap and print each facility's report        
+        for (String facilityName : facilityNetwork.keySet() ){
+            facilityNetwork.get(facilityName).printReport();
+        }
     }
 }

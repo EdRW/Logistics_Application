@@ -23,10 +23,11 @@
  */
 package logisticsapplication;
 
+import facilitymanager.FacilityManager;
 import itemcatalog.ItemCatalog;
 import ShortestPathProcessor.ShortestPathProcessor;
-import xmlreaders.FacilityInventoryReader;
-import xmlreaders.TransportNetworkReader;
+//import xmlreaders.FacilityInventoryReader;
+//import xmlreaders.TransportNetworkReader;
 
 /**
  *
@@ -38,13 +39,22 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        //ItemCatalog ic = ItemCatalog.getInstance();
-        //ic.printReport();
-        //System.out.println("-----------------------------------------\n");
-        //TransportNetworkReader.loadPrint();
-        //System.out.println("-----------------------------------------\n");
-        //FacilityInventoryReader.loadPrint();
+        
+        // Gets an instance of the Item Catalog singleton
+        ItemCatalog ic = ItemCatalog.getInstance();
+        
+        // Tells the Item Catalog to print a report about every item it has
+        ic.printReport();        
+        
+        // Gets an instance of the Facility Manager singleton
+        FacilityManager fm = FacilityManager.getInstance();
+        
+        /*
+         * Tells the Facility Manager to print a report about every facility
+         * in the network.
+         */
+        fm.printReport();
+        
         ShortestPathProcessor.ShortestPathProcessor();
     }
     

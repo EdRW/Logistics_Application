@@ -74,5 +74,6 @@ public class ItemCatalog {
             //System.out.println(ID + " : " + Float.toString(items.get(ID)));
             System.out.printf("%-10s: $%d\n", ID, sortedItems.get(ID));
         }
+        System.out.println("\n");
     }
 }
