@@ -37,7 +37,7 @@ public class ItemCatalog {
     // This class uses singleton design pattern
     private static ItemCatalog instance = new ItemCatalog();
     // holds list item IDs and prices
-    private HashMap<String, Integer> items;
+    private final HashMap<String, Integer> items;
     
     private ItemCatalog(){
         /*
