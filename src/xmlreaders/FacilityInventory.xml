@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FacilityInventory>
+
+	<Facility>
+		<Name>Seattle, WA</Name>
+		<Item>
+			<ID>ABC123</ID>
+			<Quantity>45</Quantity>
+		</Item>
+		<Item>
+			<ID>JBL3100</ID>
+			<Quantity>52</Quantity>
+		</Item>
+		<Item>
+			<ID>PL132-C</ID>
+			<Quantity>54</Quantity>
+		</Item>
+		<Item>
+			<ID>PU238</ID>
+			<Quantity>60</Quantity>
+		</Item>
+	</Facility>
+
+	<Facility>
+		<Name>San Francisco, CA</Name>
+		<Item>
+			<ID>RL123A</ID>
+			<Quantity>40</Quantity>
+		</Item>
+		<Item>
+			<ID>XLK200B</ID>
+			<Quantity>8</Quantity>
+		</Item>
+		<Item>
+			<ID>SR71-D</ID>
+			<Quantity>81</Quantity>
+		</Item>
+		<Item>
+			<ID>CT1928</ID>
+			<Quantity>46</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Los Angeles, CA</Name>
+		<Item>
+			<ID>RX100-3</ID>
+			<Quantity>57</Quantity>
+		</Item>
+		<Item>
+			<ID>JBL3100</ID>
+			<Quantity>60</Quantity>
+		</Item>
+		<Item>
+			<ID>E241i</ID>
+			<Quantity>44</Quantity>
+		</Item>
+		<Item>
+			<ID>XTP202</ID>
+			<Quantity>32</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Phoenix, AZ</Name>
+		<Item>
+			<ID>RX100-3</ID>
+			<Quantity>18</Quantity>
+		</Item>
+		<Item>
+			<ID>SR71-D</ID>
+			<Quantity>55</Quantity>
+		</Item>
+		<Item>
+			<ID>SN-241-L</ID>
+			<Quantity>22</Quantity>
+		</Item>
+		<Item>
+			<ID>ZTF109</ID>
+			<Quantity>54</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Denver, CO</Name>
+		<Item>
+			<ID>ABC123</ID>
+			<Quantity>80</Quantity>
+		</Item>
+		<Item>
+			<ID>RL123A</ID>
+			<Quantity>110</Quantity>
+		</Item>
+		<Item>
+			<ID>RTF110</ID>
+			<Quantity>100</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Santa Fe, NM</Name>
+		<Item>
+			<ID>RX100-3</ID>
+			<Quantity>144</Quantity>
+		</Item>
+		<Item>
+			<ID>CR2032</ID>
+			<Quantity>280</Quantity>
+		</Item>
+	</Facility>
+
+	<Facility>
+		<Name>Fargo, ND</Name>
+		<Item>
+			<ID>ABC123</ID>
+			<Quantity>25</Quantity>
+		</Item>
+		<Item>
+			<ID>JBL3100</ID>
+			<Quantity>32</Quantity>
+		</Item>
+		<Item>
+			<ID>XLK200B</ID>
+			<Quantity>82</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Austin, TX</Name>
+		<Item>
+			<ID>RL123A</ID>
+			<Quantity>66</Quantity>
+		</Item>
+		<Item>
+			<ID>RX100-3</ID>
+			<Quantity>35</Quantity>
+		</Item>
+		<Item>
+			<ID>SN-241-L</ID>
+			<Quantity>35</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>St. Louis, MO</Name>
+		<Item>
+			<ID>ABC123</ID>
+			<Quantity>70</Quantity>
+		</Item>
+		<Item>
+			<ID>SR71-D</ID>
+			<Quantity>45</Quantity>
+		</Item>
+		<Item>
+			<ID>PU238</ID>
+			<Quantity>82</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Chicago, IL</Name>
+		<Item>
+			<ID>ABC123</ID>
+			<Quantity>60</Quantity>
+		</Item>
+		<Item>
+			<ID>E241i</ID>
+			<Quantity>64</Quantity>
+		</Item>
+		<Item>
+			<ID>CT1928</ID>
+			<Quantity>20</Quantity>
+		</Item>
+		<Item>
+			<ID>RTF110</ID>
+			<Quantity>110</Quantity>
+		</Item>
+		<Item>
+			<ID>XTP202</ID>
+			<Quantity>20</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>New Orleans, LA</Name>
+		<Item>
+			<ID>MM35P</ID>
+			<Quantity>100</Quantity>
+		</Item>
+		<Item>
+			<ID>PU238</ID>
+			<Quantity>49</Quantity>
+		</Item>
+		<Item>
+			<ID>ZTF109</ID>
+			<Quantity>120</Quantity>
+		</Item>
+	</Facility>
+
+	<Facility>
+		<Name>Nashville, TN</Name>
+		<Item>
+			<ID>RX100-3</ID>
+			<Quantity>78</Quantity>
+		</Item>
+		<Item>
+			<ID>XLK200B</ID>
+			<Quantity>250</Quantity>
+		</Item>
+		<Item>
+			<ID>CR2032</ID>
+			<Quantity>366</Quantity>
+		</Item>
+		<Item>
+			<ID>SN-241-L</ID>
+			<Quantity>16</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Detroit, MI</Name>
+		<Item>
+			<ID>JBL3100</ID>
+			<Quantity>117</Quantity>
+		</Item>
+		<Item>
+			<ID>SR71-D</ID>
+			<Quantity>8</Quantity>
+		</Item>
+		<Item>
+			<ID>CT1928</ID>
+			<Quantity>72</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Boston, MA</Name>
+		<Item>
+			<ID>MM35P</ID>
+			<Quantity>47</Quantity>
+		</Item>
+		<Item>
+			<ID>PL132-C</ID>
+			<Quantity>83</Quantity>
+		</Item>
+		<Item>
+			<ID>CT1928</ID>
+			<Quantity>65</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>New York City, NY</Name>
+		<Item>
+			<ID>RL123A</ID>
+			<Quantity>12</Quantity>
+		</Item>
+		<Item>
+			<ID>CR2032</ID>
+			<Quantity>132</Quantity>
+		</Item>
+		<Item>
+			<ID>E241i</ID>
+			<Quantity>72</Quantity>
+		</Item>
+		<Item>
+			<ID>ZTF109</ID>
+			<Quantity>28</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Norfolk, VA</Name>
+		<Item>
+			<ID>MM35P</ID>
+			<Quantity>66</Quantity>
+		</Item>
+		<Item>
+			<ID>RL123A</ID>
+			<Quantity>50</Quantity>
+		</Item>
+		<Item>
+			<ID>XLK200B</ID>
+			<Quantity>14</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Atlanta, GA</Name>
+		<Item>
+			<ID>RX100-3</ID>
+			<Quantity>90</Quantity>
+		</Item>
+		<Item>
+			<ID>E241i</ID>
+			<Quantity>32</Quantity>
+		</Item>
+		<Item>
+			<ID>PU238</ID>
+			<Quantity>120</Quantity>
+		</Item>
+	</Facility>
+	
+	<Facility>
+		<Name>Miami, FL</Name>
+		<Item>
+			<ID>MM35P</ID>
+			<Quantity>16</Quantity>
+		</Item>
+		<Item>
+			<ID>JBL3100</ID>
+			<Quantity>44</Quantity>
+		</Item>
+		<Item>
+			<ID>SR71-D</ID>
+			<Quantity>15</Quantity>
+		</Item>
+		<Item>
+			<ID>SN-241-L</ID>
+			<Quantity>28</Quantity>
+		</Item>
+		<Item>
+			<ID>XTP202</ID>
+			<Quantity>88</Quantity>
+		</Item>
+	</Facility>
+
+</FacilityInventory>
