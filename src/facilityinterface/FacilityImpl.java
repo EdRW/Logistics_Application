@@ -23,6 +23,7 @@
  */
 package facilityinterface;
 
+import inventory.Inventory;
 import java.util.HashMap;
 
 /**
@@ -34,7 +35,7 @@ public class FacilityImpl implements Facility{
     private final int facilityRate;
     private final int facilityCost;
     private final HashMap<String, Integer> facilityNeighbors;
-    //Inventory Object
+    private Inventory facilityInventory = null;
     //Schedule Object
     
     FacilityImpl(String name, int rate, int cost, HashMap<String, Integer> neighbors){
@@ -43,6 +44,16 @@ public class FacilityImpl implements Facility{
         facilityRate = rate;
         facilityCost = cost;
         facilityNeighbors = neighbors;
+    }
+    
+    @Override
+    public void loadInventory(HashMap<String, Integer> inventory){
+        if (facilityInventory == null) {
+            facilityInventory = new Inventory(inventory);
+        }
+        else{
+            //TODO throw an exception
+        }
     }
     
     @Override
@@ -58,6 +69,8 @@ public class FacilityImpl implements Facility{
             System.out.printf(name + " (%.1fd); ", facilityNeighbors.get(name)/450.0f);
         }
         System.out.println("\n");
+        
+        facilityInventory.printReport();
     }
 
     @Override

@@ -23,6 +23,7 @@
  */
 package inventory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -31,9 +32,36 @@ import java.util.HashMap;
  */
 public class Inventory {
     
-    HashMap<String, Integer> inventory;
+    private final HashMap<String, Integer> inventory;
     
-    Inventory(HashMap<String, Integer> items){
-         
+    public Inventory(HashMap<String, Integer> items){
+         inventory = items;
+    }
+    
+    
+    
+    public void removeItems(String item, Integer requestedQty){
+        Integer currQty = inventory.get(item);
+        if (requestedQty > currQty) {
+            //TODO throw error
+        }
+        currQty -= requestedQty;
+        inventory.put(item, currQty);
+    }
+    
+    public void printReport() {
+        System.out.println("Active Inventory:");
+        System.out.printf("\t%-10s %s\n", "Item ID", "Quanity");
+        
+        ArrayList<String> depleted = new ArrayList<>();
+        for (String item : inventory.keySet()) {
+            Integer currQty = inventory.get(item);
+            System.out.printf("\t%-10s %d\n", item, currQty);
+            if (currQty <= 0) {
+                depleted.add(item);
+            } 
+        }
+        System.out.println("\nDepleted (Used-Up) Inventory: " + ((depleted.isEmpty())? "None" : depleted)); 
+        System.out.println("\n");
     }
 }

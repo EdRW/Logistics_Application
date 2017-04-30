@@ -33,5 +33,6 @@ public interface Facility {
     // void updateSchedule();
     // method to get current schedule details
     HashMap<String, Integer> getNeighbors();
+    void loadInventory(HashMap<String, Integer> inventory);
     void printReport();
 }

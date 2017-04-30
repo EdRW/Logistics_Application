@@ -32,6 +32,7 @@ import java.util.HashMap;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
+import xmlreaders.FacilityInventoryReader;
 import xmlreaders.TransportNetworkReader;
 
 /**
@@ -51,6 +52,8 @@ public class FacilityManager {
     private FacilityManager() {
         try{
             facilityNetwork = TransportNetworkReader.load();
+            FacilityInventoryReader.load(facilityNetwork);
+            
         } catch (XMLFileNotFoundException | XMLUnexpectedNodeException | ParserConfigurationException | SAXException | IOException | DOMException e){
             e.printStackTrace(System.out);
         }
