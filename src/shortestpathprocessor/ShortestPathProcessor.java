@@ -35,15 +35,16 @@ public class ShortestPathProcessor {
     private static ShortestPathProcessor instance;
     
     // this is used in mapPairs to map the pairs whoo
-    HashMap<String,Integer> pairs = new HashMap<>();
+    private HashMap<String,Integer> pairs;
     // seen is used to fill up mapPairs
-    HashSet<String> seen = new HashSet<>();
-    ArrayList<String> lowPath = new ArrayList<>();
+    private HashSet<String> seen;
+    private ArrayList<String> lowPath;
             
             
     private ShortestPathProcessor () {
-        
-        
+        pairs = new HashMap<>();
+        seen = new HashSet<>();
+        lowPath = new ArrayList<>();
         System.out.println("This is a test of the ShortestPathProcessor");
     }
     
@@ -54,14 +55,20 @@ public class ShortestPathProcessor {
         return instance;
     }
     
-    public void findBestPath(String start, String end) {
+    public ArrayList<String> findBestPath(String start, String end) {
         // TODO parameters are start,end
+        System.out.println("mapPairs begins");
         mapPairs(start);
+        System.out.println("mapPairs ends");
+        
         ArrayList<String> pathList = new ArrayList<>();
         // add start to ArrayList
         pathList.add(start);
+        System.out.println("findPaths begins");
         findPaths(start, end, pathList);
-        // return lowPath
+        System.out.println("findPaths ends");
+        System.out.println("lowPath = " + lowPath);
+        return lowPath;
         
     }
     
@@ -76,66 +83,86 @@ public class ShortestPathProcessor {
         FacilityManager facilityManager = FacilityManager.getInstance();
         HashMap<String, Integer> neighbors = facilityManager.getNeighbors(start);
         for (String neighborName : neighbors.keySet()) {
-            // decide which string comes first-
-            String newPair = (start.compareTo(neighborName) == -1) ? start.concat(";"+neighborName) : neighborName.concat(";"+start);
+            String newPair =  ShortestPathHelper.concatenateStringHelper(start,neighborName);
             pairs.put(newPair,neighbors.get(neighborName));
             if (seen.contains(neighborName) == false) {
                 mapPairs(neighborName);
+            }
         }
-        }
-        // start + name of neighbor , distance
-        
+        // start + name of neighbor , distance   
     }
     
     private void findPaths(String start, String end, ArrayList<String> pathList) {
         // pass start, end, and pathList
         // there is a special case for when start equals end
-        if (start == null ? end == null : start.equals(end)) {
+        if (start.equals(end)) {
             if (lowPath.isEmpty()) {
                 lowPath = pathList;
             }
             else {
                 // sum the length of miles of "pathList"
-                int sum = 0;
-                for (String pair : pairs.keySet()) {
-                    for (String path : pathList) {
-                        if (pair.contains(path)) {
-                            sum += pairs.get(pair);
-                        }
-                    }
-                 }
-                    // get distance from pairs
-                // if sum < length of lowPath
-                if (sum < lowPath.size()) {
+                // get distance from pairs
+                // if sum < length of lowPath  
+                int pathListDistance = sumPath(pathList);
+                int lowPathDistance = sumPath(lowPath);
+                if (pathListDistance < lowPathDistance) {
                     lowPath = pathList;
                 }
             }
-        } else {
+        } 
+        else {
             HashSet<String> fromHere = new HashSet<>();
             // for each pairing in "pairs" HashSet
             for (String pair : pairs.keySet()) {
                  // does the first node in the pair equal start?
                     // if yes, add the pair to the fromHere HashSet
-                if (pair.contains(start)) {
+                if (ShortestPathHelper.getFirstNodeHelper(pair).equals(start)) {
                     fromHere.add(pair);
                 }
                 // for each pairing in from Here HashSet
-                for (String pairing : fromHere) {
-                    // does pathList contain the second node in the pair?
-                    if (!pathList.contains(pairing)) {
-                        // if no, ArrayList<String> = a copy of pathList
-                        ArrayList<String> newPath = new ArrayList<>(pathList);
-                        // ArrayList<String> splitPairs = new ArrayList<>(pairing.split(";"));
-                        
-                         // add second node in current pair to newPath
+            }
 
-                        
-                    }
+            for (String pairing : fromHere) {
+                // does pathList contain the second node in the pair?
+                if (!pathList.contains(ShortestPathHelper.getSecondNodeHelper(pairing))) {
+                    // if no, ArrayList<String> = a copy of pathList
+                    ArrayList<String> newPath = new ArrayList<>(pathList);
+                    newPath.add(ShortestPathHelper.getSecondNodeHelper(pairing));
+                     // add second node in current pair to newPath
+                     findPaths(ShortestPathHelper.getSecondNodeHelper(pairing),end, newPath);
+
+
                 }
             }
-                                // recursive call findPaths on second node in pair, end, newPath
+
+
+// recursive call findPaths on second node in pair, end, newPath
         }
         // fill fromHere with pairs containing the starting facility
         // recursive call
     }
+    
+    private int sumPath(ArrayList<String> pathList) {
+        //System.out.println(pathList);
+        int sum = 0;
+        for (int i=0; i < (pathList.size()-1); i++) {
+            int distance = getPairDistance(pathList.get(i), pathList.get(i+1));
+            sum += distance;
+        }
+        return sum;
+    }
+    
+    private int getPairDistance(String cityOne, String cityTwo) {
+        String pairKey = ShortestPathHelper.concatenateStringHelper(cityOne,cityTwo);
+        //System.out.println(pairKey);
+        //System.out.println(pairs.get(pairKey));
+        //System.out.println(pairs);
+        return pairs.get(pairKey);
+    }
+    
+    public void printBestPath(String start, String end) {
+        findBestPath(start,end);
+        
+    }
+    
 }
