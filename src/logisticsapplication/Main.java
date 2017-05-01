@@ -58,7 +58,7 @@ public class Main {
         ShortestPathProcessor spp = ShortestPathProcessor.getInstance();
         //System.out.println(spp.findBestPath("Denver, CO", "Boston, MA"));
         //spp.findBestPath("");
-        
+        spp.shortestPathTests();
     }
     
 }
