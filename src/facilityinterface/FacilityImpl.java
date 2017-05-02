@@ -25,6 +25,8 @@ package facilityinterface;
 
 import inventory.Inventory;
 import java.util.HashMap;
+import schedule.Schedule;
+import schedule.ScheduleImplFactory;
 
 /**
  *
@@ -35,8 +37,8 @@ public class FacilityImpl implements Facility{
     private final int facilityRate;
     private final int facilityCost;
     private final HashMap<String, Integer> facilityNeighbors;
-    private Inventory facilityInventory = null;
-    //Schedule Object
+    private  Inventory facilityInventory;
+    private  Schedule facilitySchedule;
     
     FacilityImpl(String name, int rate, int cost, HashMap<String, Integer> neighbors){
         // TODO add parameter error checking
@@ -44,6 +46,7 @@ public class FacilityImpl implements Facility{
         facilityRate = rate;
         facilityCost = cost;
         facilityNeighbors = neighbors;
+        facilitySchedule = ScheduleImplFactory.build(rate);
     }
     
     @Override
@@ -71,6 +74,8 @@ public class FacilityImpl implements Facility{
         System.out.println("\n");
         
         facilityInventory.printReport();
+        facilitySchedule.printReport();
+        System.out.println("----------------------------------------------------------------------------------");
     }
 
     @Override

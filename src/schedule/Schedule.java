@@ -21,23 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package facilityinterface;
-
-import java.util.HashMap;
+package schedule;
 
 /**
  *
  * @author Edmund Wright and Camille Rose
  */
-public interface Facility {
-    // void updateSchedule();
-    // method to get current schedule details
-
-    /**
-     * 
-     * @return HashMap with the name of each neighbor's name and the distance to it.
-     */
-    HashMap<String, Integer> getNeighbors();
-    void loadInventory(HashMap<String, Integer> inventory);
+public interface Schedule {
     void printReport();
+    int daysCapacity(int day);
+    int earliestAvailability();
+    int expectedProductionEndDate (int Qty);
+    int expectedProductionNumDays (int Qty);
+    int reserveSchedule (int Qty);
 }

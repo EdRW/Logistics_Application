@@ -21,23 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package facilityinterface;
-
-import java.util.HashMap;
+package schedule;
 
 /**
  *
  * @author Edmund Wright and Camille Rose
  */
-public interface Facility {
-    // void updateSchedule();
-    // method to get current schedule details
-
-    /**
-     * 
-     * @return HashMap with the name of each neighbor's name and the distance to it.
-     */
-    HashMap<String, Integer> getNeighbors();
-    void loadInventory(HashMap<String, Integer> inventory);
-    void printReport();
+public class ScheduleImplFactory {
+    public static Schedule build (int rate) {
+        return new ScheduleImpl(rate);
+    }
+    
+    public static Schedule update(ScheduleImpl impl) {
+        return impl;
+    }
 }

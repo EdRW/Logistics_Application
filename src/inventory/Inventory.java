@@ -38,15 +38,22 @@ public class Inventory {
          inventory = items;
     }
     
+    public int requestQuantity(String item) {
+        return inventory.get(item);
+    }
     
+    public Boolean hasItem(String item) {
+        return (inventory.get(item) > 0);
+    }
     
-    public void removeItems(String item, Integer requestedQty){
+    public int removeItems(String item, Integer requestedQty){
         Integer currQty = inventory.get(item);
         if (requestedQty > currQty) {
             //TODO throw error
         }
         currQty -= requestedQty;
         inventory.put(item, currQty);
+        return currQty;
     }
     
     public void printReport() {
@@ -62,6 +69,6 @@ public class Inventory {
             } 
         }
         System.out.println("\nDepleted (Used-Up) Inventory: " + ((depleted.isEmpty())? "None" : depleted)); 
-        System.out.println("\n");
+        System.out.println();
     }
 }

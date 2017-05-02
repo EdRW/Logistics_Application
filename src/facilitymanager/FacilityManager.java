@@ -51,6 +51,7 @@ public class FacilityManager {
     
     private FacilityManager() {
         try{
+            // TODO Combine these 2
             facilityNetwork = TransportNetworkReader.load();
             FacilityInventoryReader.load(facilityNetwork);
             
@@ -86,4 +87,6 @@ public class FacilityManager {
             facilityNetwork.get(facilityName).printReport();
         }
     }
+    
+    // TODO add indiviual facility print report
 }

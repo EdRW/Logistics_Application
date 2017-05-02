@@ -25,6 +25,8 @@ package logisticsapplication;
 
 import facilitymanager.FacilityManager;
 import itemcatalog.ItemCatalog;
+import java.util.Collections;
+import java.util.HashMap;
 import shortestpathprocessor.ShortestPathProcessor;
 //import xmlreaders.FacilityInventoryReader;
 //import xmlreaders.TransportNetworkReader;
@@ -59,6 +61,11 @@ public class Main {
         //System.out.println(spp.findBestPath("Denver, CO", "Boston, MA"));
         //spp.findBestPath("");
         spp.shortestPathTests();
+//        HashMap<Integer, String> dog = new HashMap<>();
+//        dog.put(40, "oneforty");
+//        dog.put(2, "two");
+//        dog.put(67, "sixtyseven");
+//        System.out.println(Collections.max(dog.keySet()));
     }
     
 }
