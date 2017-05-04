@@ -23,6 +23,7 @@
  */
 package itemcatalog;
 
+import customexceptions.ItemNotFoundException;
 import xmlreaders.ItemCatalogReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,11 +41,6 @@ public class ItemCatalog {
     private final HashMap<String, Integer> items;
     
     private ItemCatalog(){
-        /*
-         * add the Item Catalog reader in here to build
-         * ItemCatalog instance object.
-         * Or maybe add nothing here. Not sure.
-         */
         items = ItemCatalogReader.load();
     }
     
@@ -59,7 +55,10 @@ public class ItemCatalog {
         return items.containsKey(ID);
     }
     
-    public float getPrice(String ID) {
+    public float getPrice(String ID) throws ItemNotFoundException {
+        if (!itemExists(ID)) {
+            throw new ItemNotFoundException("Item: " + ID + " is not in the item catalog.");
+        }
         return items.get(ID);
     }
     

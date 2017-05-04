@@ -35,10 +35,8 @@ import java.util.HashSet;
 public class ShortestPathProcessor {
     private static ShortestPathProcessor instance;
     
-    // this is used in mapPairs to map the pairs whoo
-    private HashMap<String,Integer> pairs;
-    // seen is used to fill up mapPairs
-    private HashSet<String> seen;
+    private final HashMap<String,Integer> pairs;
+    private final HashSet<String> seen;
     private ArrayList<String> lowPath;
             
             
@@ -46,7 +44,6 @@ public class ShortestPathProcessor {
         pairs = new HashMap<>();
         seen = new HashSet<>();
         lowPath = new ArrayList<>();
-        //System.out.println("This is a test of the ShortestPathProcessor");
     }
     
     public static ShortestPathProcessor getInstance() {
@@ -62,34 +59,28 @@ public class ShortestPathProcessor {
         }
         if (!FacilityManager.getInstance().facilityExists(end)) {
             throw new CityNotFoundException("Invalid city name: " + end);
-    }
+        }
 
-        //System.out.println("mapPairs begins");
         mapPairs(start);
-        //System.out.println("mapPairs ends");
         
         ArrayList<String> pathList = new ArrayList<>();
-        // add start to ArrayList
+
         pathList.add(start);
-        //System.out.println("findPaths begins");
+
         lowPath.clear();
         findPaths(start, end, pathList);
-        //System.out.println("findPaths ends");
-        //System.out.println("lowPath = " + lowPath);
+
         return lowPath;
         
     }
     
     private void mapPairs(String start) {
-        // takes the start node (a string with a name of city)
-        // add "start" to seen HashSet
-        // pairs add getNeighbors(start) with each neighbor and distance
-        // use concatenation of start with string of hashmap for getNeighbors by alphabetical order
-        // getNeighbors returns a hashmap of String,Integer (cityName and distance)
-        // for loop
         seen.add(start);
+        
         FacilityManager facilityManager = FacilityManager.getInstance();
+        
         HashMap<String, Integer> neighbors = facilityManager.getNeighbors(start);
+        
         for (String neighborName : neighbors.keySet()) {
             String newPair =  concatenateStringHelper(start,neighborName);
             pairs.put(newPair,neighbors.get(neighborName));
@@ -97,20 +88,15 @@ public class ShortestPathProcessor {
                 mapPairs(neighborName);
             }
         }
-        // start + name of neighbor , distance   
+
     }
     
     private void findPaths(String start, String end, ArrayList<String> pathList) {
-        // pass start, end, and pathList
-        // there is a special case for when start equals end
         if (start.equals(end)) {
             if (lowPath.isEmpty()) {
                 lowPath = pathList;
             }
-            else {
-                // sum the length of miles of "pathList"
-                // get distance from pairs
-                // if sum < length of lowPath  
+            else { 
                 int pathListDistance = sumPath(pathList);
                 int lowPathDistance = sumPath(lowPath);
                 if (pathListDistance < lowPathDistance) {
@@ -120,38 +106,24 @@ public class ShortestPathProcessor {
         } 
         else {
             HashSet<String> fromHere = new HashSet<>();
-            // for each pairing in "pairs" HashSet
+
             for (String pair : pairs.keySet()) {
-                 // does the first node in the pair equal start?
-                    // if yes, add the pair to the fromHere HashSet
                 if (getFirstNodeHelper(pair).equals(start)) {
                     fromHere.add(pair);
                 }
-                // for each pairing in from Here HashSet
             }
 
             for (String pairing : fromHere) {
-                // does pathList contain the second node in the pair?
                 if (!pathList.contains(getSecondNodeHelper(pairing))) {
-                    // if no, ArrayList<String> = a copy of pathList
                     ArrayList<String> newPath = new ArrayList<>(pathList);
                     newPath.add(getSecondNodeHelper(pairing));
-                     // add second node in current pair to newPath
                      findPaths(getSecondNodeHelper(pairing),end, newPath);
-
-
                 }
             }
-
-
-// recursive call findPaths on second node in pair, end, newPath
         }
-        // fill fromHere with pairs containing the starting facility
-        // recursive call
     }
     
     private int sumPath(ArrayList<String> pathList) {
-        //System.out.println(pathList);
         int sum = 0;
         for (int i=0; i < (pathList.size()-1); i++) {
             int distance = getPairDistance(pathList.get(i), pathList.get(i+1));
@@ -162,9 +134,7 @@ public class ShortestPathProcessor {
     
     private int getPairDistance(String cityOne, String cityTwo) {
         String pairKey = concatenateStringHelper(cityOne,cityTwo);
-        //System.out.println(pairKey);
-        //System.out.println(pairs.get(pairKey));
-        //System.out.println(pairs);
+        
         return pairs.get(pairKey);
     }
     
@@ -194,7 +164,6 @@ public class ShortestPathProcessor {
         testCities.put("h",concatenateStringHelper("Miami, FL", "Seattle, WA"));
         testCities.put("i",concatenateStringHelper("Los Angeles, CA", "Chicago, IL"));
         testCities.put("j",concatenateStringHelper("Detroit, MI", "Nashville, TN"));
-        testCities.put("error",concatenateStringHelper("Chicago, IL", "NotAnotherCity, USA"));
         
         System.out.println("Shortest Path Tests:");
         
@@ -209,10 +178,7 @@ public class ShortestPathProcessor {
             }
             System.out.printf("%s = %d mi\n", end, totalDistance);
             System.out.printf("%d mi / (8 hours per day * 50 mph) = %.2f days\n\n", totalDistance, (totalDistance/400.00f));
-        }
-
-        
-        
+        }     
     }
     
 }

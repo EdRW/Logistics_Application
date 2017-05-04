@@ -23,15 +23,8 @@
  */
 package facilitymanager;
 
-import customexceptions.XMLFileNotFoundException;
-import customexceptions.XMLUnexpectedNodeException;
 import facilityinterface.Facility;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.DOMException;
-import org.xml.sax.SAXException;
 import xmlreaders.FacilityInventoryReader;
 import xmlreaders.TransportNetworkReader;
 
@@ -43,20 +36,11 @@ public class FacilityManager {
     // This class uses singleton design pattern
     private static FacilityManager instance = new FacilityManager();
     
-    private HashMap<String, Facility> facilityNetwork;
-    
-    // TODO create a private hashmap that holds a String with facility name and reference to facility obj
-    
-    // TODO create a private hashmap that holds pairs of facility names and the distance between them
+    private final HashMap<String, Facility> facilityNetwork;
     
     private FacilityManager() {
-        try{
-            facilityNetwork = TransportNetworkReader.load();
-            FacilityInventoryReader.load(facilityNetwork);
-            
-        } catch (XMLFileNotFoundException | XMLUnexpectedNodeException | ParserConfigurationException | SAXException | IOException | DOMException e){
-            e.printStackTrace(System.out);
-        }
+        facilityNetwork = TransportNetworkReader.load();
+        FacilityInventoryReader.load(facilityNetwork);  
     }
     
     public static FacilityManager getInstance() {

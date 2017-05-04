@@ -28,7 +28,6 @@ import customexceptions.XMLUnexpectedNodeException;
 import facilityinterface.Facility;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -46,64 +45,66 @@ import org.xml.sax.SAXException;
  */
 public class FacilityInventoryReader {
 
-    public static void load(HashMap<String, Facility> facilityNetwork)throws XMLFileNotFoundException, XMLUnexpectedNodeException, SAXException, IOException, ParserConfigurationException{
+    public static void load(HashMap<String, Facility> facilityNetwork){
+        try {
 
-        String fileName = "src\\XMLReaders\\FacilityInventory.xml";
 
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
 
-        File xml = new File(fileName);
-        if (!xml.exists()) {
-            throw new XMLFileNotFoundException("**** XML File '" + fileName + "' cannot be found");
-        }
+            String fileName = "src\\XMLReaders\\FacilityInventory.xml";
 
-        Document doc = db.parse(xml);
-        doc.getDocumentElement().normalize();
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
 
-        NodeList facilityEntries = doc.getDocumentElement().getChildNodes();
-
-        for (int i = 0; i < facilityEntries.getLength(); i++) {
-            if (facilityEntries.item(i).getNodeType() == Node.TEXT_NODE) {
-                continue;
+            File xml = new File(fileName);
+            if (!xml.exists()) {
+                throw new XMLFileNotFoundException("**** XML File '" + fileName + "' cannot be found");
             }
 
-            String entryName = facilityEntries.item(i).getNodeName();
-            if (!entryName.equals("Facility")) {
-                throw new XMLUnexpectedNodeException("Unexpected node found: " + entryName);
-            }
+            Document doc = db.parse(xml);
+            doc.getDocumentElement().normalize();
 
-            // Get named nodes
-            Element elem = (Element) facilityEntries.item(i);
-            String facilityName = elem.getElementsByTagName("Name").item(0).getTextContent();
-            
-            HashMap<String, Integer> inventory = new HashMap<>();
+            NodeList facilityEntries = doc.getDocumentElement().getChildNodes();
 
-            // This line is just here so we have something to print while troubleshooting
-            //ArrayList<String> itemDescriptions = new ArrayList<>();
-            // Get all noded named "Item" - there can be 0 or more
-            NodeList itemList = elem.getElementsByTagName("Item");
-
-            for (int j = 0; j < itemList.getLength(); j++) {
-                if(itemList.item(j).getNodeType() == Node.TEXT_NODE) {
+            for (int i = 0; i < facilityEntries.getLength(); i++) {
+                if (facilityEntries.item(i).getNodeType() == Node.TEXT_NODE) {
                     continue;
                 }
 
-                entryName = itemList.item(j).getNodeName();
-                if (!entryName.equals("Item")) {
+                String entryName = facilityEntries.item(i).getNodeName();
+                if (!entryName.equals("Facility")) {
                     throw new XMLUnexpectedNodeException("Unexpected node found: " + entryName);
                 }
 
                 // Get named nodes
-                elem = (Element) itemList.item(j);
-                String itemID = elem.getElementsByTagName("ID").item(0).getTextContent();
-                String itemQuant = elem.getElementsByTagName("Quantity").item(0).getTextContent();
-                
-                inventory.put(itemID, Integer.parseInt(itemQuant));
-                //itemDescriptions.add("(ID: "+ itemID + ", Quantity: " + itemQuant + ")");
-            }
-            facilityNetwork.get(facilityName).loadInventory(inventory);
-            //System.out.println("Facility: " + facilityName + "\nItems: " + itemDescriptions + "\n");
-        }    
-    }
+                Element elem = (Element) facilityEntries.item(i);
+                String facilityName = elem.getElementsByTagName("Name").item(0).getTextContent();
+
+                HashMap<String, Integer> inventory = new HashMap<>();
+
+                // Get all noded named "Item" - there can be 0 or more
+                NodeList itemList = elem.getElementsByTagName("Item");
+
+                for (int j = 0; j < itemList.getLength(); j++) {
+                    if(itemList.item(j).getNodeType() == Node.TEXT_NODE) {
+                        continue;
+                    }
+
+                    entryName = itemList.item(j).getNodeName();
+                    if (!entryName.equals("Item")) {
+                        throw new XMLUnexpectedNodeException("Unexpected node found: " + entryName);
+                    }
+
+                    // Get named nodes
+                    elem = (Element) itemList.item(j);
+                    String itemID = elem.getElementsByTagName("ID").item(0).getTextContent();
+                    String itemQuant = elem.getElementsByTagName("Quantity").item(0).getTextContent();
+
+                    inventory.put(itemID, Integer.parseInt(itemQuant));
+                }
+                facilityNetwork.get(facilityName).loadInventory(inventory);
+            }    
+        } catch (XMLFileNotFoundException | XMLUnexpectedNodeException | ParserConfigurationException | SAXException | IOException | DOMException e) {
+            e.printStackTrace();
+        }
+    } 
 }
