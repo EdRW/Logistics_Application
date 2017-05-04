@@ -56,18 +56,14 @@ public class ItemCatalog {
     }
     
     public boolean itemExists(String ID) {
-        // TODO this method does nothing. Put code here.
-        return false;
+        return items.containsKey(ID);
     }
     
     public float getPrice(String ID) {
-        // TODO this method does nothing. Put code here.
-        return 0.0f;
+        return items.get(ID);
     }
     
     public void printReport() {
-        // TODO this method does nothing. Put code here.
-        // loop through the hashmap and print each item and price
         System.out.println("---------------------\nItem Catalog Content:\n---------------------");
         Map<String, Integer> sortedItems = new TreeMap<>(items);
         for (String ID : sortedItems.keySet()) {

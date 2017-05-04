@@ -23,6 +23,7 @@
  */
 package shortestpathprocessor;
 
+import customexceptions.CityNotFoundException;
 import facilitymanager.FacilityManager;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -55,8 +56,14 @@ public class ShortestPathProcessor {
         return instance;
     }
     
-    public ArrayList<String> findBestPath(String start, String end) {
-        // TODO parameters are start,end
+    public ArrayList<String> findBestPath(String start, String end) throws CityNotFoundException {
+        if (!FacilityManager.getInstance().facilityExists(start)) {
+            throw new CityNotFoundException("Invalid city name: " + start);
+        }
+        if (!FacilityManager.getInstance().facilityExists(end)) {
+            throw new CityNotFoundException("Invalid city name: " + end);
+    }
+
         //System.out.println("mapPairs begins");
         mapPairs(start);
         //System.out.println("mapPairs ends");
@@ -84,7 +91,7 @@ public class ShortestPathProcessor {
         FacilityManager facilityManager = FacilityManager.getInstance();
         HashMap<String, Integer> neighbors = facilityManager.getNeighbors(start);
         for (String neighborName : neighbors.keySet()) {
-            String newPair =  ShortestPathHelper.concatenateStringHelper(start,neighborName);
+            String newPair =  concatenateStringHelper(start,neighborName);
             pairs.put(newPair,neighbors.get(neighborName));
             if (seen.contains(neighborName) == false) {
                 mapPairs(neighborName);
@@ -117,7 +124,7 @@ public class ShortestPathProcessor {
             for (String pair : pairs.keySet()) {
                  // does the first node in the pair equal start?
                     // if yes, add the pair to the fromHere HashSet
-                if (ShortestPathHelper.getFirstNodeHelper(pair).equals(start)) {
+                if (getFirstNodeHelper(pair).equals(start)) {
                     fromHere.add(pair);
                 }
                 // for each pairing in from Here HashSet
@@ -125,12 +132,12 @@ public class ShortestPathProcessor {
 
             for (String pairing : fromHere) {
                 // does pathList contain the second node in the pair?
-                if (!pathList.contains(ShortestPathHelper.getSecondNodeHelper(pairing))) {
+                if (!pathList.contains(getSecondNodeHelper(pairing))) {
                     // if no, ArrayList<String> = a copy of pathList
                     ArrayList<String> newPath = new ArrayList<>(pathList);
-                    newPath.add(ShortestPathHelper.getSecondNodeHelper(pairing));
+                    newPath.add(getSecondNodeHelper(pairing));
                      // add second node in current pair to newPath
-                     findPaths(ShortestPathHelper.getSecondNodeHelper(pairing),end, newPath);
+                     findPaths(getSecondNodeHelper(pairing),end, newPath);
 
 
                 }
@@ -154,25 +161,40 @@ public class ShortestPathProcessor {
     }
     
     private int getPairDistance(String cityOne, String cityTwo) {
-        String pairKey = ShortestPathHelper.concatenateStringHelper(cityOne,cityTwo);
+        String pairKey = concatenateStringHelper(cityOne,cityTwo);
         //System.out.println(pairKey);
         //System.out.println(pairs.get(pairKey));
         //System.out.println(pairs);
         return pairs.get(pairKey);
     }
     
-    public void shortestPathTests() {
+    private String concatenateStringHelper(String start, String neighborName) {
+        return start.concat(";".concat(neighborName));
+    }
+    
+    private String getFirstNodeHelper(String combinedName) {
+        String[] splitStringArrayList = combinedName.split(";");
+        return splitStringArrayList[0];
+    }
+    
+    private String getSecondNodeHelper(String combinedName) {
+        String[] splitStringArrayList = combinedName.split(";");
+        return splitStringArrayList[1];
+    }
+    
+    public void shortestPathTests() throws CityNotFoundException {
         HashMap<String, String> testCities = new HashMap<>();
-        testCities.put("a",ShortestPathHelper.concatenateStringHelper("Santa Fe, NM", "Chicago, IL"));
-        testCities.put("b",ShortestPathHelper.concatenateStringHelper("Atlanta, GA", "St. Louis, MO"));
-        testCities.put("c",ShortestPathHelper.concatenateStringHelper("Seattle, WA", "Nashville, TN"));
-        testCities.put("d",ShortestPathHelper.concatenateStringHelper("New York City, NY", "Phoenix, AZ"));
-        testCities.put("e",ShortestPathHelper.concatenateStringHelper("Fargo, ND", "Austin, TX"));
-        testCities.put("f",ShortestPathHelper.concatenateStringHelper("Denver, CO", "Miami, FL"));
-        testCities.put("g",ShortestPathHelper.concatenateStringHelper("Austin, TX", "Norfolk, VA"));
-        testCities.put("h",ShortestPathHelper.concatenateStringHelper("Miami, FL", "Seattle, WA"));
-        testCities.put("i",ShortestPathHelper.concatenateStringHelper("Los Angeles, CA", "Chicago, IL"));
-        testCities.put("j",ShortestPathHelper.concatenateStringHelper("Detroit, MI", "Nashville, TN"));
+        testCities.put("a",concatenateStringHelper("Santa Fe, NM", "Chicago, IL"));
+        testCities.put("b",concatenateStringHelper("Atlanta, GA", "St. Louis, MO"));
+        testCities.put("c",concatenateStringHelper("Seattle, WA", "Nashville, TN"));
+        testCities.put("d",concatenateStringHelper("New York City, NY", "Phoenix, AZ"));
+        testCities.put("e",concatenateStringHelper("Fargo, ND", "Austin, TX"));
+        testCities.put("f",concatenateStringHelper("Denver, CO", "Miami, FL"));
+        testCities.put("g",concatenateStringHelper("Austin, TX", "Norfolk, VA"));
+        testCities.put("h",concatenateStringHelper("Miami, FL", "Seattle, WA"));
+        testCities.put("i",concatenateStringHelper("Los Angeles, CA", "Chicago, IL"));
+        testCities.put("j",concatenateStringHelper("Detroit, MI", "Nashville, TN"));
+        testCities.put("error",concatenateStringHelper("Chicago, IL", "NotAnotherCity, USA"));
         
         System.out.println("Shortest Path Tests:");
         

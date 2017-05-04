@@ -45,10 +45,7 @@ import org.xml.sax.SAXException;
  * @author Edmund Wright and Camille Rose
  */
 public class FacilityInventoryReader {
-         /*
-     * TODO This is a temporary method that should be reworked
-     * to load XML and return a list of facility inventory objects
-     */
+
     public static void load(HashMap<String, Facility> facilityNetwork)throws XMLFileNotFoundException, XMLUnexpectedNodeException, SAXException, IOException, ParserConfigurationException{
 
         String fileName = "src\\XMLReaders\\FacilityInventory.xml";

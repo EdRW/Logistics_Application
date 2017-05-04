@@ -51,7 +51,6 @@ public class FacilityManager {
     
     private FacilityManager() {
         try{
-            // TODO Combine these 2
             facilityNetwork = TransportNetworkReader.load();
             FacilityInventoryReader.load(facilityNetwork);
             
@@ -67,14 +66,11 @@ public class FacilityManager {
         return instance;
     }
     
-    //TODO let the shortest path processor handle this
-    public float getDistance(String facilityA, String facilityB) {
-        // TODO this method does nothing. Put code here.
-        return 0.0f;
+    public boolean facilityExists(String facilityName) {
+        return facilityNetwork.containsKey(facilityName);
     }
     
     public HashMap<String, Integer> getNeighbors(String facilityName) {
-         // TODO this method does nothing. Put code here.
         return facilityNetwork.get(facilityName).getNeighbors();
     }
     
@@ -87,6 +83,4 @@ public class FacilityManager {
             facilityNetwork.get(facilityName).printReport();
         }
     }
-    
-    // TODO add indiviual facility print report
 }

@@ -47,11 +47,7 @@ import org.xml.sax.SAXException;
  * @author Edmund Wright and Camille Rose
  */
 public class TransportNetworkReader {
-    
-     /*
-     * TODO This is a temporary method that should be reworked
-     * to load XML and return a list of facility objects
-     */
+
     public static HashMap<String, Facility> load() throws XMLFileNotFoundException, XMLUnexpectedNodeException, SAXException, IOException, ParserConfigurationException{
 
         String fileName = "src\\XMLReaders\\TransportNetwork.xml";
