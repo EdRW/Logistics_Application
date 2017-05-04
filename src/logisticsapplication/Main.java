@@ -25,11 +25,7 @@ package logisticsapplication;
 
 import facilitymanager.FacilityManager;
 import itemcatalog.ItemCatalog;
-import java.util.Collections;
-import java.util.HashMap;
 import shortestpathprocessor.ShortestPathProcessor;
-//import xmlreaders.FacilityInventoryReader;
-//import xmlreaders.TransportNetworkReader;
 
 /**
  *
@@ -41,31 +37,15 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        // Gets an instance of the Item Catalog singleton
+
         ItemCatalog ic = ItemCatalog.getInstance();
-        
-        // Tells the Item Catalog to print a report about every item it has
         ic.printReport();        
-        
-        // Gets an instance of the Facility Manager singleton
+
         FacilityManager fm = FacilityManager.getInstance();
-        
-        /*
-         * Tells the Facility Manager to print a report about every facility
-         * in the network.
-         */
         fm.printReport();
         
         ShortestPathProcessor spp = ShortestPathProcessor.getInstance();
-        //System.out.println(spp.findBestPath("Denver, CO", "Boston, MA"));
-        //spp.findBestPath("");
         spp.shortestPathTests();
-//        HashMap<Integer, String> dog = new HashMap<>();
-//        dog.put(40, "oneforty");
-//        dog.put(2, "two");
-//        dog.put(67, "sixtyseven");
-//        System.out.println(Collections.max(dog.keySet()));
     }
     
 }

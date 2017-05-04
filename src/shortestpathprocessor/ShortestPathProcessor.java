@@ -152,7 +152,7 @@ public class ShortestPathProcessor {
         return splitStringArrayList[1];
     }
     
-    public void shortestPathTests() throws CityNotFoundException {
+    public void shortestPathTests() {
         HashMap<String, String> testCities = new HashMap<>();
         testCities.put("a",concatenateStringHelper("Santa Fe, NM", "Chicago, IL"));
         testCities.put("b",concatenateStringHelper("Atlanta, GA", "St. Louis, MO"));
@@ -168,16 +168,21 @@ public class ShortestPathProcessor {
         System.out.println("Shortest Path Tests:");
         
         for (String key : testCities.keySet()){
-            String start = ShortestPathHelper.getFirstNodeHelper(testCities.get(key));
-            String end = ShortestPathHelper.getSecondNodeHelper(testCities.get(key));
-            ArrayList<String> bestPath = findBestPath(start,end);
-            int totalDistance = sumPath(bestPath);
-            System.out.printf("%s) %s to %s:\n", key, start, end);
-            for (int i = 0; i < (bestPath.size()-1); i++) {
-                System.out.printf("%s  ", bestPath.get(i));   
+            String start = getFirstNodeHelper(testCities.get(key));
+            String end = getSecondNodeHelper(testCities.get(key));
+            try {
+                ArrayList<String> bestPath = findBestPath(start,end);
+
+                int totalDistance = sumPath(bestPath);
+                System.out.printf("%s) %s to %s:\n", key, start, end);
+                for (int i = 0; i < (bestPath.size()-1); i++) {
+                    System.out.printf("%s  ", bestPath.get(i));   
+                }
+                System.out.printf("%s = %d mi\n", end, totalDistance);
+                System.out.printf("%d mi / (8 hours per day * 50 mph) = %.2f days\n\n", totalDistance, (totalDistance/400.00f));
+            } catch (CityNotFoundException e) {
+                e.printStackTrace();
             }
-            System.out.printf("%s = %d mi\n", end, totalDistance);
-            System.out.printf("%d mi / (8 hours per day * 50 mph) = %.2f days\n\n", totalDistance, (totalDistance/400.00f));
         }     
     }
     
