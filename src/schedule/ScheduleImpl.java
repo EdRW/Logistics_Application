@@ -82,7 +82,8 @@ public class ScheduleImpl implements Schedule{
     }
 
     @Override
-    public int expectedProductionNumDays (int Qty) {
+    public int processingNumDays (int orderDay, int Qty) {
+        //TODO Add neagative day exception
         int end = earliestAvailability();
         int days = 0;
         while (Qty > 0) {
@@ -97,8 +98,9 @@ public class ScheduleImpl implements Schedule{
     }
     
     @Override
-    public int expectedProductionEndDate (int Qty) {
-        int end = earliestAvailability();
+    public int processingEndDate (int orderDay, int Qty) {
+        //TODO Add neagative day exception
+        int end = orderDay;
         while (Qty > 0) {
             int capacity = daysCapacity(end);
             if (capacity != 0){
@@ -110,10 +112,9 @@ public class ScheduleImpl implements Schedule{
     }
     
     @Override
-    public int reserveSchedule (int Qty) {
-        //call earliest available day
-        // call expectedProductionNumDays
-        int end = earliestAvailability();
+    public int reserve (int orderDay, int Qty) {
+        //TODO Add neagative day exception
+        int end = orderDay;
         while (Qty > 0) {
             int capacity = daysCapacity(end);
             if (capacity != 0){
@@ -122,8 +123,8 @@ public class ScheduleImpl implements Schedule{
                     schedule.put(end, 0);
                 }
                 else {
-                    Qty -= Qty;
                     schedule.put(end, capacity - Qty);
+                    Qty -= Qty;
                 }
             }
             end++;

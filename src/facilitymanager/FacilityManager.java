@@ -58,6 +58,15 @@ public class FacilityManager {
         return facilityNetwork.get(facilityName).getNeighbors();
     }
     
+    
+    public int updateSchedule(String facilityName, int orderDay, int qty) {
+        return facilityNetwork.get(facilityName).updateSchedule(orderDay, qty);
+    }
+    
+    public int processingEndDate(String facilityName, int orderDay, int qty){
+        return facilityNetwork.get(facilityName).processingEndDate(orderDay, qty);
+    }
+    
     public void printReport() {
         System.out.println("----------------------------------------------------------------------------------");
         System.out.println("FACILITY STATUS REPORT");

@@ -40,4 +40,6 @@ public interface Facility {
     HashMap<String, Integer> getNeighbors();
     void loadInventory(HashMap<String, Integer> inventory);
     void printReport();
+    int updateSchedule(int orderDay, int qty);
+    int processingEndDate(int orderDay, int qty);
 }

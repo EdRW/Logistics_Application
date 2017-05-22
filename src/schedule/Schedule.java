@@ -31,7 +31,7 @@ public interface Schedule {
     void printReport();
     int daysCapacity(int day);
     int earliestAvailability();
-    int expectedProductionEndDate (int Qty);
-    int expectedProductionNumDays (int Qty);
-    int reserveSchedule (int Qty);
+    int processingEndDate (int orderDay, int Qty);
+    int processingNumDays (int orderDay, int Qty);
+    int reserve (int orderDay, int Qty);
 }

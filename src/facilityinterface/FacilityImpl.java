@@ -60,6 +60,15 @@ public class FacilityImpl implements Facility{
     }
     
     @Override
+    public int updateSchedule (int orderDay, int qty) {
+        return facilitySchedule.reserve(orderDay, qty);
+    }
+    
+    public int processingEndDate(int orderDay, int qty){
+        return facilitySchedule.processingEndDate(orderDay, qty);
+    }
+    
+    @Override
     public void printReport(){
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         System.out.println("----------------------------------------------------------------------------------");
