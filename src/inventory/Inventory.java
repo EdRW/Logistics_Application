@@ -59,7 +59,7 @@ public class Inventory {
     
     public void printReport() {
         System.out.println("Active Inventory:");
-        System.out.printf("\t%-10s %s\n", "Item ID", "Quanity");
+        System.out.printf("\t%-10s %s\n", "Item ID", "Quantity");
         
         ArrayList<String> depleted = new ArrayList<>();
         for (String item : inventory.keySet()) {

@@ -26,6 +26,7 @@ package logisticsapplication;
 import facilitymanager.FacilityManager;
 import itemcatalog.ItemCatalog;
 import shortestpathprocessor.ShortestPathProcessor;
+import xmlreaders.OrdersReader;
 
 /**
  *
@@ -46,6 +47,8 @@ public class Main {
         
         ShortestPathProcessor spp = ShortestPathProcessor.getInstance();
         spp.shortestPathTests();
+        
+        OrdersReader.load();
     }
     
 }

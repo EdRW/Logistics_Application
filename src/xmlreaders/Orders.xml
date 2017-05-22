@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Orders>
+
+	<Order>
+		<ID>TO-001</ID>
+		<Time>Day 1</Time>
+		<Destination>Miami, FL</Destination>
+		<Item>
+			<Name>ABC123</Name>
+			<QTY>180</QTY>
+		</Item>
+		<Item>
+			<Name>CR2032</Name>
+			<QTY>320</QTY>
+		</Item>
+	</Order>
+
+	<Order>
+		<ID>TO-002</ID>
+		<Time>Day 1</Time>
+		<Destination>Boston, MA</Destination>
+		<Item>
+			<Name>PL132-C</Name>
+			<QTY>5</QTY>
+		</Item>
+		<Item>
+			<Name>XLK200B</Name>
+			<QTY>120</QTY>
+		</Item>
+	</Order>
+	
+	<Order>
+		<ID>TO-003</ID>
+		<Time>Day 4</Time>
+		<Destination>Seattle, WA</Destination>
+		<Item>
+			<Name>XTP202</Name>
+			<QTY>100</QTY>
+		</Item>
+		<Item>
+			<Name>E241i</Name>
+			<QTY>105</QTY>
+		</Item>
+	</Order>
+	
+	<Order>
+		<ID>TO-004</ID>
+		<Time>Day 10</Time>
+		<Destination>Phoenix, AZ</Destination>
+		<Item>
+			<Name>CR2032</Name>
+			<QTY>200</QTY>
+		</Item>
+		<Item>
+			<Name>SR71-D</Name>
+			<QTY>85</QTY>
+		</Item>
+	</Order>
+	
+	<Order>
+		<ID>TO-005</ID>
+		<Time>Day 7</Time>
+		<Destination>Chicago, IL</Destination>
+		<Item>
+			<Name>XLK200B</Name>
+			<QTY>120</QTY>
+		</Item>
+		<Item>
+			<Name>RX100-3</Name>
+			<QTY>200</QTY>
+		</Item>
+		<Item>
+			<Name>SN-241-L</Name>
+			<QTY>60</QTY>
+		</Item>
+	</Order>
+	
+	<Order>
+		<ID>TO-006</ID>
+		<Time>Day 1</Time>
+		<Destination>Denver, CO</Destination>
+		<Item>
+			<Name>CT1928</Name>
+			<QTY>120</QTY>
+		</Item>
+		<Item>
+			<Name>MM35P</Name>
+			<QTY>200</QTY>
+		</Item>
+	</Order>
+	
+</Orders>
