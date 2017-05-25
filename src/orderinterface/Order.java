@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Edmund Wright and Camille Rose.
+ * Copyright 2017 Camille Rose and Edmund Wright.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,37 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package logisticsapplication;
+package orderinterface;
 
-import facilitymanager.FacilityManager;
-import itemcatalog.ItemCatalog;
-import shortestpathprocessor.ShortestPathProcessor;
-import xmlreaders.OrderReader;
-import ordermanager.OrderManager;
 
 /**
  *
- * @author Edmund Wright and Camille Rose
+ * @author Camille Rose and Edmund Wright
  */
-public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-
-        ItemCatalog ic = ItemCatalog.getInstance();
-        ic.printReport();        
-
-        FacilityManager fm = FacilityManager.getInstance();
-        fm.printReport();
-        
-        ShortestPathProcessor spp = ShortestPathProcessor.getInstance();
-        spp.shortestPathTests();
-        
-        
-        OrderManager om = OrderManager.getInstance();
-        om.printReport();
-    }
-    
+public interface Order {
+    // return an array of orders?
+    // method to get orders which returns DTO class?
+    void loadOrder();
+    void printReport();
 }

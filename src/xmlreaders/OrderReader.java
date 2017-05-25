@@ -36,18 +36,22 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import orderinterface.Order;
 import java.util.ArrayList;
+import java.util.HashMap;
+import orderinterface.OrderImplFactory;
 
 /**
  *
  * @author Camille Rose and Edmund Wright
  */
-public class OrdersReader {
+public class OrderReader {
     
    // public static Order[] load(){
-    public static void load() {
+    public static ArrayList<Order> load() {
         // for Order[] this is still to be created (order impl class)
-        int orderNum = 1;
+        //int orderNum = 1;
+        ArrayList<Order> orders = new ArrayList<>();
         
         try {
 
@@ -78,10 +82,12 @@ public class OrdersReader {
                 String orderTime = elem.getElementsByTagName("Time").item(0).getTextContent();
                 String orderDestination = elem.getElementsByTagName("Destination").item(0).getTextContent();
                 
-                ArrayList<String> fullOrderInfo = new ArrayList<>();
+//                ArrayList<String> fullOrderInfo = new ArrayList<>();
 
                 // Get all noded named "Item" - there can be 0 or more
                 NodeList itemList = elem.getElementsByTagName("Item");
+                
+                HashMap<String, Integer> orderItems = new HashMap<>();
                 
                 for (int j = 0; j < itemList.getLength(); j++) {
                     if(itemList.item(j).getNodeType() == Node.TEXT_NODE) {
@@ -99,18 +105,20 @@ public class OrdersReader {
                     String itemQuantity = elem.getElementsByTagName("QTY").item(0).getTextContent();
 
                     
-                    fullOrderInfo.add("Item ID: " + itemName + ", Quantity: " + itemQuantity);
+                    orderItems.put(itemName, Integer.parseInt(itemQuantity));
+//                    fullOrderInfo.add("Item ID: " + itemName + ", Quantity: " + itemQuantity);
                 }
-                    
-                    System.out.println("Order #" + orderNum);
-                    orderNum = orderNum + 1;
-                    System.out.println("Order ID: " + orderID);
-                    System.out.println("Order Time: " + orderTime + "\nDestination: " + orderDestination);
-                    System.out.println("List of Order Items:\n" + fullOrderInfo);
+                  orders.add(OrderImplFactory.build(orderID, orderTime, orderDestination, orderItems));
+                 //   System.out.println("Order #" + orderNum);
+                 //   orderNum = orderNum + 1;
+//                    System.out.println("Order ID: " + orderID);
+//                    System.out.println("Order Time: " + orderTime + "\nDestination: " + orderDestination);
+//                    System.out.println("List of Order Items:\n" + fullOrderInfo);
 
             }    
         } catch (XMLFileNotFoundException | XMLUnexpectedNodeException | ParserConfigurationException | SAXException | IOException | DOMException e) {
             e.printStackTrace();
-        }      
+        }
+        return orders;
     }
 }

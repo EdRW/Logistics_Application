@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Edmund Wright and Camille Rose.
+ * Copyright 2017 Camille Rose and Edmund Wright.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,37 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package logisticsapplication;
+package ordermanager;
 
-import facilitymanager.FacilityManager;
-import itemcatalog.ItemCatalog;
-import shortestpathprocessor.ShortestPathProcessor;
+import java.util.ArrayList;
+import orderinterface.Order;
 import xmlreaders.OrderReader;
-import ordermanager.OrderManager;
-
 /**
  *
- * @author Edmund Wright and Camille Rose
+ * @author Camille Rose and Edmund Wright
  */
-public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-
-        ItemCatalog ic = ItemCatalog.getInstance();
-        ic.printReport();        
-
-        FacilityManager fm = FacilityManager.getInstance();
-        fm.printReport();
-        
-        ShortestPathProcessor spp = ShortestPathProcessor.getInstance();
-        spp.shortestPathTests();
-        
-        
-        OrderManager om = OrderManager.getInstance();
-        om.printReport();
+public class OrderManager {
+    
+    private static OrderManager instance = new OrderManager();
+    
+    private final ArrayList<Order> orderList;
+    
+    private OrderManager() {
+        orderList = OrderReader.load();
     }
     
+    public static OrderManager getInstance() {
+        if (instance == null) {
+            instance = new OrderManager();
+        }
+    return instance;
+    }
+    
+    public void printReport() {
+        int orderNum = 1;
+        
+        for (Order order : orderList) {
+            System.out.println("----------------------------------------------------------------------------------");
+            System.out.println("Order #" + orderNum);
+            order.printReport();
+            orderNum++;
+        }
+    }
 }
