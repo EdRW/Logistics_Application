@@ -21,12 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ordermanager;
+package orderinterface;
+
+import java.util.HashMap;
 
 /**
  *
  * @author Camille Rose and Edmund Wright
  */
 public class OrderDTO {
-    // TO DO all of this
+    public final String orderID;
+    public final String orderTime;
+    public final String orderDestination;
+    public final HashMap<String, Integer> itemInfo;
+    
+    OrderDTO(String iD, String time, String destination, HashMap<String, Integer> items) {
+        orderID = iD;
+        orderTime = time;
+        orderDestination = destination;
+        itemInfo = items;
+    }
 }

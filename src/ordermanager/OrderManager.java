@@ -25,6 +25,7 @@ package ordermanager;
 
 import java.util.ArrayList;
 import orderinterface.Order;
+import orderinterface.OrderDTO;
 import xmlreaders.OrderReader;
 /**
  *
@@ -45,6 +46,16 @@ public class OrderManager {
             instance = new OrderManager();
         }
     return instance;
+    }
+    
+    public OrderDTO getOrderDTO(int orderIndex) throws Exception {
+        if (orderIndex >= orderList.size()) {
+            // TODO create a custom exception for this in package custom exceptions
+            throw new Exception("Order Index out of range.");
+        }
+        else {
+            return orderList.get(orderIndex).getOrderDTO();
+        }
     }
     
     public void printReport() {

@@ -29,8 +29,6 @@ package orderinterface;
  * @author Camille Rose and Edmund Wright
  */
 public interface Order {
-    // return an array of orders?
-    // method to get orders which returns DTO class?
-    void loadOrder();
+    OrderDTO getOrderDTO();
     void printReport();
 }
