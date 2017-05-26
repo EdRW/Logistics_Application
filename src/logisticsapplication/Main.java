@@ -41,16 +41,16 @@ public class Main {
     public static void main(String[] args) {
 
         ItemCatalog ic = ItemCatalog.getInstance();
-        ic.printReport();        
+//        ic.printReport();        
 
         FacilityManager fm = FacilityManager.getInstance();
-        fm.printReport();
+//        fm.printReport();
         
         ShortestPathProcessor spp = ShortestPathProcessor.getInstance();
-        spp.shortestPathTests();
+//        spp.shortestPathTests();
         
         OrderManager om = OrderManager.getInstance();
-        om.printReport();
+//        om.printReport();
         
         OrderProcessor op = OrderProcessor.getInstance();
         op.startOrderProcessing();

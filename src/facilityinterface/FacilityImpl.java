@@ -23,6 +23,7 @@
  */
 package facilityinterface;
 
+import customexceptions.QuantityException;
 import inventory.Inventory;
 import java.util.HashMap;
 import schedule.Schedule;
@@ -77,6 +78,15 @@ public class FacilityImpl implements Facility{
     @Override
     public int processingEndDate(int orderDay, int qty){
         return facilitySchedule.processingEndDate(orderDay, qty);
+    }
+    
+    @Override
+    public void reduceInventory(String itemName, int itemQty){
+        try {
+            facilityInventory.removeItems(itemName, itemQty);
+        } catch (QuantityException e) {
+            e.printStackTrace();
+        }
     }
     
     @Override

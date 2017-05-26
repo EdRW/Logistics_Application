@@ -32,6 +32,9 @@ import xmlreaders.TransportNetworkReader;
  *
  * @author Edmund Wright and Camille Rose
  */
+
+// TODO All of these public methods need exceptions
+
 public class FacilityManager {
     // This class uses singleton design pattern
     private static FacilityManager instance = new FacilityManager();
@@ -71,6 +74,10 @@ public class FacilityManager {
         return facilitiesList;
     }
     
+    public void reduceInventory(String facilityName, String itemName, int itemQty) {
+        facilityNetwork.get(facilityName).reduceInventory(itemName, itemQty);
+    }
+    
     public int updateSchedule(String facilityName, int orderDay, int qty) {
         return facilityNetwork.get(facilityName).updateSchedule(orderDay, qty);
     }
@@ -79,6 +86,9 @@ public class FacilityManager {
         return facilityNetwork.get(facilityName).processingEndDate(orderDay, qty);
     }
     
+    public void printFacilityReport(String facilityName) {
+        facilityNetwork.get(facilityName).printReport();
+    }
     public void printReport() {
         System.out.println("----------------------------------------------------------------------------------");
         System.out.println("FACILITY STATUS REPORT");

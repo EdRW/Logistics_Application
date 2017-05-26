@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Edmund Wright and Camille Rose.
+ * Copyright 2017 Camille Rose and Edmund Wright.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package facilityinterface;
-
-import java.util.HashMap;
+package orderprocessor;
 
 /**
  *
- * @author Edmund Wright and Camille Rose
+ * @author Camille Rose and Edmund Wright
  */
-public interface Facility {
-    // void updateSchedule();
-    // method to get current schedule details
+public class FacilityRecord implements Comparable <FacilityRecord> {
+    public String facilityName;
+    public int quantityNeeded;
+    public int processingEndDay;
+    public int travelTime;
+    public int arrivalDay;
+    
+    FacilityRecord(String name, int items, int endDay, int tt) {
+        facilityName = name;
+        quantityNeeded = items;
+        processingEndDay = endDay;
+        travelTime = tt;
+        arrivalDay = travelTime + processingEndDay;
+    }
 
-    /**
-     * 
-     * @return HashMap with the name of each neighbor's name and the distance to it.
-     */
-    HashMap<String, Integer> getNeighbors();
-    void loadInventory(HashMap<String, Integer> inventory);
-    int itemQuanity (String itemName);
-    boolean hasItem (String itemName);
-    void printReport();
-    int updateSchedule(int orderDay, int qty);
-    int processingEndDate(int orderDay, int qty);
-    void reduceInventory(String itemName, int itemQty);
+    @Override
+    public int compareTo(FacilityRecord fr) {
+        return arrivalDay - fr.arrivalDay;
+    }
+    
+    public void print(){
+        System.out.println("Facility Name: " + facilityName);
+        System.out.println("Item Count: " + quantityNeeded);
+        System.out.println("Travel Time: " + travelTime);
+        System.out.println("Processing End Day: " + processingEndDay);
+        System.out.println("Arrival Day: " + arrivalDay + "\n");
+    }
+    
 }
+
+

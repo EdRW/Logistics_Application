@@ -26,6 +26,8 @@ package orderprocessor;
 import customexceptions.CityNotFoundException;
 import facilitymanager.FacilityManager;
 import itemcatalog.ItemCatalog;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import orderinterface.OrderDTO;
 import ordermanager.OrderManager;
@@ -52,6 +54,27 @@ public class OrderProcessor {
     private OrderDTO getOrder(int orderIndex){
         return OrderManager.getInstance().getOrderDTO(orderIndex);
     }
+    
+    private ArrayList<FacilityRecord> facilityRecordGenerator(HashMap<String, Integer> facilitiesWithItem, OrderDTO order, int quantityRemaining) {
+        ArrayList<FacilityRecord> facilityRecords = new ArrayList<>();
+        for (String currentFacility : facilitiesWithItem.keySet()) {
+            int facilityQty = facilitiesWithItem.get(currentFacility);
+            int quantityNeeded = Math.min(quantityRemaining, facilityQty);
+            try {
+                int travelTime = ShortestPathProcessor.getInstance().bestPathTravelTime(currentFacility, order.orderDestination);
+                int processingEndDay = FacilityManager.getInstance().processingEndDate(currentFacility, order.orderDay, quantityNeeded);
+
+
+                facilityRecords.add(new FacilityRecord(currentFacility, quantityNeeded, processingEndDay, travelTime));
+
+
+            } catch (CityNotFoundException e) {
+                e.printStackTrace();
+
+            }
+        }
+        return facilityRecords;
+    }
     // TODO delete as this may not be necessary
 //    private boolean checkItemsExist(OrderDTO order) {
 //        boolean returnVal = true;
@@ -64,9 +87,11 @@ public class OrderProcessor {
 //        return returnVal;
 //    }
     
-    public void startOrderProcessing() throws CityNotFoundException {
+    public void startOrderProcessing() {
         int orderIndex = 0;
         OrderDTO order;
+        ArrayList<FacilityRecord> orderItemSolutionList = new ArrayList<>();
+        
         while ((order = getOrder(orderIndex)) != null) {
             // TODO remove print statements for troubleshooting
             System.out.println(order.orderID);
@@ -75,15 +100,16 @@ public class OrderProcessor {
             System.out.println(order.itemInfo + "\n");
             
             // are the keys in the itemInfo also in the itemCatalog?
-            for (String item : order.itemInfo.keySet()) {
-                if (!ItemCatalog.getInstance().itemExists(item)) {
+            for (String itemName : order.itemInfo.keySet()) {
+                if (!ItemCatalog.getInstance().itemExists(itemName)) {
                     // item does not exist
-                    System.out.println(item + " Item was rejected.");
+                    System.out.println(itemName + " Item was rejected.");
                     continue;
                 }   
                 else {
                     // item does exist
-                    HashMap <String, Integer> facilitiesWithItem = FacilityManager.getInstance().facilitiesWithItem(item);                   
+                    FacilityManager facilityManager = FacilityManager.getInstance();
+                    HashMap <String, Integer> facilitiesWithItem = facilityManager.facilitiesWithItem(itemName);                   
                     
                     if (facilitiesWithItem.containsKey(order.orderDestination)) {
                         facilitiesWithItem.remove(order.orderDestination);
@@ -92,19 +118,49 @@ public class OrderProcessor {
                         //TODO Generate the back order report for remaineder of the quanity of items
                         continue;
                     }
-
                     // TODO process the item
-                    int quantityRemaining = order.itemInfo.get(item);
-                    for (String currentFacility : facilitiesWithItem.keySet()) {
-                        int quantityNeeded = Math.min(quantityRemaining, facilitiesWithItem.get(currentFacility));
+                    //method call here for ordrProcess
+                    int orderItemQuantityRemaining = order.itemInfo.get(itemName);
+                    ArrayList<FacilityRecord> facilityRecords = facilityRecordGenerator(facilitiesWithItem, order, orderItemQuantityRemaining);
+                    try {
+                    System.out.println("This is the item name: " + itemName + " Cost: " + ItemCatalog.getInstance().getPrice(itemName));
+                    } catch (Exception e) {
                         
-                        int travelTime = ShortestPathProcessor.getInstance().bestPathTravelTime(currentFacility, order.orderDestination);
-                        int processingEndDay = FacilityManager.getInstance().processingEndDate(currentFacility, order.orderDay, quantityNeeded);
-                        
-                        int arrivalDay = travelTime + processingEndDay;
                     }
+//                    System.out.println("Unsorted!!!~~~@@@@@@@@@@@@@@@@@@@@@@@@@@");
+//                    for (FacilityRecord f : facilityRecords) {
+//                        f.print();
+//                    }
+//                    System.out.println("Sorting!!!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                    Collections.sort(facilityRecords);
                     
+                    for (FacilityRecord f : facilityRecords) {
+                        f.print();
+                    }
+                    for (FacilityRecord facilityRecord : facilityRecords){
+                        System.out.println("Reducing Inventories...");
+                        orderItemQuantityRemaining -= facilityRecord.quantityNeeded;
+                        
+                        if (orderItemQuantityRemaining > 0){
+                            facilityManager.reduceInventory(facilityRecord.facilityName, itemName, facilityRecord.quantityNeeded);
+                            facilityManager.updateSchedule(facilityRecord.facilityName, order.orderDay, facilityRecord.quantityNeeded);
+                            facilityManager.printFacilityReport(facilityRecord.facilityName);
+                            orderItemSolutionList.add(facilityRecord);
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    if (orderItemQuantityRemaining > 0){
+                    //TODO Generate the back order report for remaineder of the quanity of items
+                    // figure out how to identify the desired facilities again
+                    }
+                
                 }
+                // TODO   generate logistics record for the Order Items with the facility the inventory was taken from, 
+                /* the qtyNeeded from the facility record, calculate the total cost, and include the arrival day
+                all totaled Ex. TOTAL 180 $1898 11
+                */
             }
             orderIndex++;
         }

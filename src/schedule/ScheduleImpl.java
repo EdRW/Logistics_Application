@@ -30,6 +30,8 @@ import java.util.HashMap;
  *
  * @author Edmund Wright and Camille Rose
  */
+
+// TODO Add exceptions for if someone requests an order day that is less than 1
 public class ScheduleImpl implements Schedule{
     
     private final HashMap<Integer, Integer> schedule;
@@ -39,7 +41,7 @@ public class ScheduleImpl implements Schedule{
     public ScheduleImpl(int rateIn) {
         rate = rateIn;
         schedule = new HashMap<>();
-        schedule.put(0, rate);
+        schedule.put(1, rate);
     }
     
     public void printReport() {
@@ -49,14 +51,14 @@ public class ScheduleImpl implements Schedule{
         
         System.out.println("Schedule:");
         System.out.printf("%-20s","Day:");
-        for (int day = 0; day <= (highestDay + 20); day++) {
+        for (int day = 1; day <= (highestDay + 20); day++) {
             System.out.printf("%-3s", Integer.toString(day));
         }
         
         System.out.println();
         
         System.out.printf("%-20s","Available:");
-        for (int day = 0; day <= (highestDay + 20); day++) {
+        for (int day = 1; day <= (highestDay + 20); day++) {
             System.out.printf("%-3s", Integer.toString(daysCapacity(day)));
         }
         
@@ -72,7 +74,7 @@ public class ScheduleImpl implements Schedule{
     @Override
    public int earliestAvailability() {
         // Returns the earlier day that production can begin
-        int day = 0;
+        int day = 1;
         Integer capacity = schedule.get(day);
         while ((capacity == 0) &&  (capacity != null)) {
             day++;
