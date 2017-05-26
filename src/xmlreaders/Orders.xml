@@ -4,7 +4,7 @@
 
 	<Order>
 		<ID>TO-001</ID>
-		<Time>Day 1</Time>
+		<Day>1</Day>
 		<Destination>Miami, FL</Destination>
 		<Item>
 			<Name>ABC123</Name>
@@ -18,7 +18,7 @@
 
 	<Order>
 		<ID>TO-002</ID>
-		<Time>Day 1</Time>
+		<Day>1</Day>
 		<Destination>Boston, MA</Destination>
 		<Item>
 			<Name>PL132-C</Name>
@@ -32,7 +32,7 @@
 	
 	<Order>
 		<ID>TO-003</ID>
-		<Time>Day 4</Time>
+		<Day>4</Day>
 		<Destination>Seattle, WA</Destination>
 		<Item>
 			<Name>XTP202</Name>
@@ -46,7 +46,7 @@
 	
 	<Order>
 		<ID>TO-004</ID>
-		<Time>Day 10</Time>
+		<Day>10</Day>
 		<Destination>Phoenix, AZ</Destination>
 		<Item>
 			<Name>CR2032</Name>
@@ -60,7 +60,7 @@
 	
 	<Order>
 		<ID>TO-005</ID>
-		<Time>Day 7</Time>
+		<Day>7</Day>
 		<Destination>Chicago, IL</Destination>
 		<Item>
 			<Name>XLK200B</Name>
@@ -78,7 +78,7 @@
 	
 	<Order>
 		<ID>TO-006</ID>
-		<Time>Day 1</Time>
+		<Day>1</Day>
 		<Destination>Denver, CO</Destination>
 		<Item>
 			<Name>CT1928</Name>

@@ -48,14 +48,13 @@ public class OrderManager {
     return instance;
     }
     
-    public OrderDTO getOrderDTO(int orderIndex) throws Exception {
-        if (orderIndex >= orderList.size()) {
-            // TODO create a custom exception for this in package custom exceptions
-            throw new Exception("Order Index out of range.");
+    public OrderDTO getOrderDTO(int orderIndex) {
+        OrderDTO returnVal = null;
+        if (orderIndex < orderList.size()) {
+            // TODO create a custom exception for this in package custom exceptions?
+            returnVal = orderList.get(orderIndex).getOrderDTO();
         }
-        else {
-            return orderList.get(orderIndex).getOrderDTO();
-        }
+        return returnVal;
     }
     
     public void printReport() {

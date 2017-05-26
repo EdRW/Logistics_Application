@@ -26,8 +26,8 @@ package logisticsapplication;
 import facilitymanager.FacilityManager;
 import itemcatalog.ItemCatalog;
 import shortestpathprocessor.ShortestPathProcessor;
-import xmlreaders.OrderReader;
 import ordermanager.OrderManager;
+import orderprocessor.OrderProcessor;
 
 /**
  *
@@ -49,9 +49,11 @@ public class Main {
         ShortestPathProcessor spp = ShortestPathProcessor.getInstance();
         spp.shortestPathTests();
         
-        
         OrderManager om = OrderManager.getInstance();
         om.printReport();
+        
+        OrderProcessor op = OrderProcessor.getInstance();
+        op.startOrderProcessing();
     }
     
 }

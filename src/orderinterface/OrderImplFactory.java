@@ -32,8 +32,8 @@ import java.util.HashMap;
  */
 public class OrderImplFactory {
     // creates order impls
-    public static Order build(String iD, String time, String destination, HashMap<String, Integer> items) {
-        return new OrderImpl(iD, time, destination, items);
+    public static Order build(String iD, int day, String destination, HashMap<String, Integer> items) {
+        return new OrderImpl(iD, day, destination, items);
     }
     
     public static Order update(Order impl) {

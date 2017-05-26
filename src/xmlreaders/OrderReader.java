@@ -79,7 +79,7 @@ public class OrderReader {
                 // Get named nodes
                 Element elem = (Element) orderEntries.item(i);
                 String orderID = elem.getElementsByTagName("ID").item(0).getTextContent();
-                String orderTime = elem.getElementsByTagName("Time").item(0).getTextContent();
+                String orderDay = elem.getElementsByTagName("Day").item(0).getTextContent();
                 String orderDestination = elem.getElementsByTagName("Destination").item(0).getTextContent();
                 
 //                ArrayList<String> fullOrderInfo = new ArrayList<>();
@@ -108,7 +108,7 @@ public class OrderReader {
                     orderItems.put(itemName, Integer.parseInt(itemQuantity));
 //                    fullOrderInfo.add("Item ID: " + itemName + ", Quantity: " + itemQuantity);
                 }
-                  orders.add(OrderImplFactory.build(orderID, orderTime, orderDestination, orderItems));
+                  orders.add(OrderImplFactory.build(orderID, Integer.parseInt(orderDay), orderDestination, orderItems));
                  //   System.out.println("Order #" + orderNum);
                  //   orderNum = orderNum + 1;
 //                    System.out.println("Order ID: " + orderID);

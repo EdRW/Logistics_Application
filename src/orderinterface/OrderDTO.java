@@ -31,13 +31,13 @@ import java.util.HashMap;
  */
 public class OrderDTO {
     public final String orderID;
-    public final String orderTime;
+    public final int orderDay;
     public final String orderDestination;
     public final HashMap<String, Integer> itemInfo;
     
-    OrderDTO(String iD, String time, String destination, HashMap<String, Integer> items) {
+    OrderDTO(String iD, int day, String destination, HashMap<String, Integer> items) {
         orderID = iD;
-        orderTime = time;
+        orderDay = day;
         orderDestination = destination;
         itemInfo = items;
     }

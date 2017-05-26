@@ -30,13 +30,13 @@ import java.util.HashMap;
  */
 public class OrderImpl implements Order {
     private final String orderID;
-    private final String orderTime;
+    private final int orderDay;
     private final String orderDestination;
     private final HashMap<String, Integer> itemInfo;
     
-    OrderImpl(String iD, String time, String destination, HashMap<String, Integer> items){
+    OrderImpl(String iD, int day, String destination, HashMap<String, Integer> items){
         orderID = iD;
-        orderTime = time;
+        orderDay = day;
         orderDestination = destination;
         itemInfo = items;
     }
@@ -44,7 +44,7 @@ public class OrderImpl implements Order {
     @Override
     public OrderDTO getOrderDTO(){
         // TODO what do?
-        return new OrderDTO(orderID, orderTime, orderDestination, new HashMap<>(itemInfo));
+        return new OrderDTO(orderID, orderDay, orderDestination, new HashMap<>(itemInfo));
     }
     
     
@@ -52,7 +52,7 @@ public class OrderImpl implements Order {
     public void printReport() {
         // TODO update to use print format instead of spaces
         System.out.println("     Order ID: " + orderID);
-        System.out.println("     Order Time: " + orderTime + "\n     Destination: " + orderDestination + "\n");
+        System.out.println("     Order Time: " + orderDay + "\n     Destination: " + orderDestination + "\n");
         System.out.println("     List of Order Items:");
         int itemNum = 1;
         for (String item : itemInfo.keySet()) {
