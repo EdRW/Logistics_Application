@@ -58,6 +58,18 @@ public class FacilityManager {
         return facilityNetwork.get(facilityName).getNeighbors();
     }
     
+    public HashMap<String, Integer> facilitiesWithItem(String itemName) {
+        HashMap<String, Integer> facilitiesList = new HashMap<>();
+        
+        for (String facilityName : facilityNetwork.keySet()) {
+            Facility facility = facilityNetwork.get(facilityName);
+            if (facility.hasItem(itemName)) {
+                facilitiesList.put(facilityName, facility.itemQuanity(itemName));
+            }
+        }
+        
+        return facilitiesList;
+    }
     
     public int updateSchedule(String facilityName, int orderDay, int qty) {
         return facilityNetwork.get(facilityName).updateSchedule(orderDay, qty);

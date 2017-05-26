@@ -23,9 +23,13 @@
  */
 package orderprocessor;
 
+import customexceptions.CityNotFoundException;
+import facilitymanager.FacilityManager;
 import itemcatalog.ItemCatalog;
+import java.util.HashMap;
 import orderinterface.OrderDTO;
 import ordermanager.OrderManager;
+import shortestpathprocessor.ShortestPathProcessor;
 
 /**
  *
@@ -60,10 +64,16 @@ public class OrderProcessor {
 //        return returnVal;
 //    }
     
-    public void startOrderProcessing() {
+    public void startOrderProcessing() throws CityNotFoundException {
         int orderIndex = 0;
         OrderDTO order;
         while ((order = getOrder(orderIndex)) != null) {
+            // TODO remove print statements for troubleshooting
+            System.out.println(order.orderID);
+            System.out.println(order.orderDay);
+            System.out.println(order.orderDestination);
+            System.out.println(order.itemInfo + "\n");
+            
             // are the keys in the itemInfo also in the itemCatalog?
             for (String item : order.itemInfo.keySet()) {
                 if (!ItemCatalog.getInstance().itemExists(item)) {
@@ -73,15 +83,29 @@ public class OrderProcessor {
                 }   
                 else {
                     // item does exist
+                    HashMap <String, Integer> facilitiesWithItem = FacilityManager.getInstance().facilitiesWithItem(item);                   
+                    
+                    if (facilitiesWithItem.containsKey(order.orderDestination)) {
+                        facilitiesWithItem.remove(order.orderDestination);
+                    }
+                    if (facilitiesWithItem.isEmpty()) {
+                        //TODO Generate the back order report for remaineder of the quanity of items
+                        continue;
+                    }
+
                     // TODO process the item
+                    int quantityRemaining = order.itemInfo.get(item);
+                    for (String currentFacility : facilitiesWithItem.keySet()) {
+                        int quantityNeeded = Math.min(quantityRemaining, facilitiesWithItem.get(currentFacility));
+                        
+                        int travelTime = ShortestPathProcessor.getInstance().bestPathTravelTime(currentFacility, order.orderDestination);
+                        int processingEndDay = FacilityManager.getInstance().processingEndDate(currentFacility, order.orderDay, quantityNeeded);
+                        
+                        int arrivalDay = travelTime + processingEndDay;
+                    }
+                    
                 }
             }
-   
-            
-            System.out.println(order.orderID);
-            System.out.println(order.orderDay);
-            System.out.println(order.orderDestination);
-            System.out.println(order.itemInfo + "\n");
             orderIndex++;
         }
     }

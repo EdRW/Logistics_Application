@@ -44,7 +44,7 @@ public class Inventory {
     }
     
     public Boolean hasItem(String item) {
-        return (inventory.get(item) > 0);
+        return (inventory.containsKey(item));
     }
     
     public int removeItems(String item, Integer requestedQty) throws QuantityException {

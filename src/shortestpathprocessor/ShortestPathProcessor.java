@@ -53,7 +53,12 @@ public class ShortestPathProcessor {
         return instance;
     }
     
-    public ArrayList<String> findBestPath(String start, String end) throws CityNotFoundException {
+    public int bestPathTravelTime (String start, String end) throws CityNotFoundException {
+        //TODO make this round up in days
+        return Math.ceil(sumPath(findBestPath(start, end))/400.0d)
+    }
+    
+    private ArrayList<String> findBestPath(String start, String end) throws CityNotFoundException {
         if (!FacilityManager.getInstance().facilityExists(start)) {
             throw new CityNotFoundException("Invalid city name: " + start);
         }
@@ -185,5 +190,4 @@ public class ShortestPathProcessor {
             }
         }     
     }
-    
 }

@@ -48,7 +48,7 @@ public class FacilityImpl implements Facility{
         facilityNeighbors = neighbors;
         facilitySchedule = ScheduleImplFactory.build(rate);
     }
-    
+     
     @Override
     public void loadInventory(HashMap<String, Integer> inventory){
         if (facilityInventory == null) {
@@ -60,10 +60,21 @@ public class FacilityImpl implements Facility{
     }
     
     @Override
+    public boolean hasItem (String itemName) {
+        return facilityInventory.hasItem(itemName);
+    }
+    
+    @Override
+    public int itemQuanity (String itemName) {
+        return facilityInventory.requestQuantity(itemName);
+    }
+    
+    @Override
     public int updateSchedule (int orderDay, int qty) {
         return facilitySchedule.reserve(orderDay, qty);
     }
     
+    @Override
     public int processingEndDate(int orderDay, int qty){
         return facilitySchedule.processingEndDate(orderDay, qty);
     }
