@@ -35,9 +35,9 @@ public class FacilityRecord implements Comparable <FacilityRecord> {
     public int travelTime;
     public int arrivalDay;
     
-    FacilityRecord(String name, int items, double processNumDays, int endDay, int tt) {
+    FacilityRecord(String name, int itemQty, double processNumDays, int endDay, int tt) {
         facilityName = name;
-        quantityNeeded = items;
+        quantityNeeded = itemQty;
         processingNumDays = processNumDays;
         processingEndDay = endDay;
         travelTime = tt;

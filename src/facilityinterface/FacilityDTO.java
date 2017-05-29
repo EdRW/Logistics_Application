@@ -23,28 +23,18 @@
  */
 package facilityinterface;
 
-import java.util.HashMap;
-
 /**
  *
  * @author Edmund Wright and Camille Rose
  */
-public interface Facility {
-    // void updateSchedule();
-    // method to get current schedule details
-
-    /**
-     * 
-     * @return HashMap with the name of each neighbor's name and the distance to it.
-     */
-    HashMap<String, Integer> getNeighbors();
-    void loadInventory(HashMap<String, Integer> inventory);
-    int itemQuanity (String itemName);
-    boolean hasItem (String itemName);
-    void printReport();
-    int updateSchedule(int orderDay, int qty);
-    int processingEndDate(int orderDay, int qty);
-    void reduceInventory(String itemName, int itemQty);
-    double processingNumDays(int orderDay, int qty);
-    FacilityDTO getFacilityDTO();
+public class FacilityDTO {
+    public String facilityName;
+    public int facilityRate;
+    public int facilityCost;
+    
+    FacilityDTO (String fn, int fr, int fc) {
+        facilityName = fn;
+        facilityRate = fr;
+        facilityCost = fc;
+    }
 }

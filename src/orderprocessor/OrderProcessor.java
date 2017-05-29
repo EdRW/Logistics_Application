@@ -24,8 +24,10 @@
 package orderprocessor;
 
 import customexceptions.CityNotFoundException;
+import customexceptions.ItemNotFoundException;
 import facilitymanager.FacilityManager;
 import itemcatalog.ItemCatalog;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -55,6 +57,87 @@ public class OrderProcessor {
         return OrderManager.getInstance().getOrderDTO(orderIndex);
     }
     
+    private void orderSolutionReport(int orderNum, OrderDTO order, HashMap<String, ArrayList<FacilityRecord>> completeOrderSolution) {
+        //TODO add something that prints backorders and rejected items
+        FacilityManager facilityManager = FacilityManager.getInstance();
+        ItemCatalog itemCatalog = ItemCatalog.getInstance();
+        DecimalFormat decimalFormat = new DecimalFormat ("$#,###.00");
+        
+        String indent1 = "  ";
+        String indent2 = indent1 + "     ";
+        
+        System.out.println("Order #" + (orderNum + 1));
+        System.out.printf(indent1 + "%-15s%s\n", "Order ID:", order.orderID);
+        System.out.printf(indent1 + "%-15s%s\n", "Order Time:", order.orderDay);
+        System.out.printf(indent1 + "%-15s%s\n", "Destination: ", order.orderDestination);
+        System.out.println();
+        
+        System.out.println(indent1 + "List of Order Items:");
+        int count = 1;
+        for (String itemName : order.itemInfo.keySet()) {
+            int qty = order.itemInfo.get(itemName);
+            System.out.printf(indent2 + "%d)%9s%10s,\tQuantity: %-5s\n", count, "Item ID:", itemName, qty);
+            count++;
+        }
+        System.out.println();
+        
+        float totalCost = 0;
+        System.out.println(indent1 + "Processing Solution:\n");
+        for (String itemName : completeOrderSolution.keySet()) {
+            System.out.println(indent1 + itemName + ":");
+            System.out.printf(indent2 + "   %-25s%-15s%-22s%s\n", "Facility", "Quantity", "Cost", "Arrival Day");
+            count = 1;
+            //System.out.println("Count: " + count);
+            double itemCost = 0;
+            double recordCost = 0;
+            double totalRecordCost = 0;
+            int totalRecordQty = 0;
+            ArrayList<Integer> arrivalDayList = new ArrayList<>();
+            
+            if (itemCatalog.itemExists(itemName)) {
+                itemCost = itemCatalog.getPrice(itemName);
+            }
+    
+            for (FacilityRecord facilityRecord : completeOrderSolution.get(itemName)) {
+                int facilityCost = 0;
+                if (facilityManager.facilityExists(facilityRecord.facilityName)) {
+                    facilityCost = facilityManager.getFacilityDTO(facilityRecord.facilityName).facilityCost;
+                    recordCost = (itemCost * facilityRecord.quantityNeeded) + (facilityRecord.processingNumDays * facilityCost) + (facilityRecord.travelTime * 500);
+                    arrivalDayList.add(facilityRecord.arrivalDay);
+                    System.out.printf(indent2 + "%d) %-25s%-15d%11s\t\t%d\n", count, facilityRecord.facilityName, facilityRecord.quantityNeeded, decimalFormat.format(recordCost), facilityRecord.arrivalDay);
+                }
+                else {
+                    recordCost = 0;
+                    System.out.printf(indent2 + "%d) %-25s%-15d%11s\t\t%s\n", count, facilityRecord.facilityName, facilityRecord.quantityNeeded, "N/A", "N/A");
+                }
+                
+                totalRecordQty += facilityRecord.quantityNeeded;
+                totalRecordCost += recordCost;
+                totalCost += recordCost;
+                
+                count++;
+            }
+            if (arrivalDayList.size() > 1) {
+                System.out.printf(indent2 + "   %-25s%-15d%11s\t\t[%d - %d]\n", "TOTAL", totalRecordQty, decimalFormat.format(totalRecordCost), Collections.min(arrivalDayList), Collections.max(arrivalDayList));
+            }
+            else if (arrivalDayList.size() == 1){
+                System.out.printf(indent2 + "   %-25s%-15d%11s\t\t[%d]\n", "TOTAL", totalRecordQty, decimalFormat.format(totalRecordCost), arrivalDayList.get(0));
+            }
+            else {
+                System.out.printf(indent2 + "   %-25s%-15d%11s\t\t%s\n", "TOTAL", 0, "N/A", "N/A");
+            }
+            System.out.println();
+        }
+        System.out.println(indent2 + "Total Cost:\t" + decimalFormat.format(totalCost));
+        System.out.println("----------------------------------------------------------------------------------\n");
+        
+    }
+    
+    private void backOrderReport(String itemName, int quantity, ArrayList<FacilityRecord> orderItemSolutionList) {
+        //System.out.println("Back Ordered Item: " + itemName + " :: QTY: " + quantity);
+        orderItemSolutionList.add(new FacilityRecord("*Back Ordered*", quantity, 0, 0, 0));
+    }
+    
     private void processOrder(String itemName, int orderItemQuantityRemaining, OrderDTO order, ArrayList<FacilityRecord> orderItemSolutionList) {
         
         FacilityManager facilityManager = FacilityManager.getInstance();
@@ -66,7 +149,7 @@ public class OrderProcessor {
 
         if (facilitiesWithItem.isEmpty()) {
             //TODO Generate the back order report for remaineder of the quanity of items
-            backOrderReport(itemName, orderItemQuantityRemaining);
+            backOrderReport(itemName, orderItemQuantityRemaining, orderItemSolutionList);
             return;
         }
         // TODO process the item
@@ -76,7 +159,7 @@ public class OrderProcessor {
         for (String currentFacility : facilitiesWithItem.keySet()) {
             int facilityQty = facilitiesWithItem.get(currentFacility);
             int quantityNeeded = Math.min(orderItemQuantityRemaining, facilityQty);
-            System.out.println(currentFacility + " " + order.orderDay+ " " + quantityNeeded);
+            //System.out.println(currentFacility + " " + order.orderDay+ " " + quantityNeeded);
             try {
                 int travelTime = ShortestPathProcessor.getInstance().bestPathTravelTime(currentFacility, order.orderDestination);
                 int processingEndDay = facilityManager.processingEndDate(currentFacility, order.orderDay, quantityNeeded);
@@ -142,30 +225,6 @@ public class OrderProcessor {
         }
     }
     
-    private void orderSolutionReport(int orderNum, OrderDTO order, HashMap<String, ArrayList<FacilityRecord>> completeOrderSolution) {
-        System.out.println("Order #" + (orderNum + 1));
-        System.out.println("\tOrder ID: " + order.orderID);
-        System.out.println("\tOrder Time: " + order.orderDay);
-        System.out.println("\tDestination: " + order.orderDestination);
-        System.out.println("\tList of Order Items:\n\t\t" + order.itemInfo + "\n");
-        
-        System.out.println("\tProcessing Solution:\n");
-        for (String itemName : completeOrderSolution.keySet()) {
-            System.out.println("\t" + itemName + ":");
-            
-            for (FacilityRecord facilityRecord : completeOrderSolution.get(itemName)) {
-                System.out.println("Facility Name: " + facilityRecord.facilityName);
-                System.out.println("Item Qty: " + facilityRecord.quantityNeeded);
-                System.out.println();
-            }
-        }
-        
-    }
-    
-    private void backOrderReport(String itemName, int quantity) {
-        System.out.println("Back Ordered Item: " + itemName + " :: QTY: " + quantity);
-    }
-    
     public void startOrderProcessing() {
         int orderIndex = 0;
         OrderDTO order;
@@ -186,8 +245,12 @@ public class OrderProcessor {
             // are the keys in the itemInfo also in the itemCatalog?
             for (String itemName : order.itemInfo.keySet()) {
                 if (!ItemCatalog.getInstance().itemExists(itemName)) {
-                    // item does not exist
-                    System.out.println(itemName + " Item was rejected.");
+                    //TODO throw exception item does not exist
+                    //System.out.println(itemName + " Item was rejected.");
+                    ArrayList<FacilityRecord> rejectedRecordList = new ArrayList<>();
+                    FacilityRecord rejectedRecord = new FacilityRecord("*DOES NOT EXIST*", 0, 0, 0, 0);
+                    rejectedRecordList.add(rejectedRecord);
+                    completeOrderSolution.put(itemName, rejectedRecordList);
                     continue;
                 }   
                 else {

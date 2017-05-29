@@ -55,10 +55,7 @@ public class ItemCatalog {
         return items.containsKey(ID);
     }
     
-    public float getPrice(String ID) throws ItemNotFoundException {
-        if (!itemExists(ID)) {
-            throw new ItemNotFoundException("Item: " + ID + " is not in the item catalog.");
-        }
+    public float getPrice(String ID) {
         return items.get(ID);
     }
     

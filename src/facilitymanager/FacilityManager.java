@@ -23,7 +23,9 @@
  */
 package facilitymanager;
 
+import customexceptions.CityNotFoundException;
 import facilityinterface.Facility;
+import facilityinterface.FacilityDTO;
 import java.util.HashMap;
 import xmlreaders.FacilityInventoryReader;
 import xmlreaders.TransportNetworkReader;
@@ -59,6 +61,10 @@ public class FacilityManager {
     
     public HashMap<String, Integer> getNeighbors(String facilityName) {
         return facilityNetwork.get(facilityName).getNeighbors();
+    }
+    
+    public FacilityDTO getFacilityDTO(String facilityName) {
+        return facilityNetwork.get(facilityName).getFacilityDTO();
     }
     
     public HashMap<String, Integer> facilitiesWithItem(String itemName) {

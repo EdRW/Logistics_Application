@@ -81,13 +81,13 @@ public class ScheduleImpl implements Schedule{
 //            capacity = schedule.get(day);
 //        }
 //        return day;
-
+        //TODO make this presentable...
         int day = 1;
         while (true) {
             if (!schedule.containsKey(day)) {
                 return day;
             }
-            else if (schedule.containsKey(day) && schedule.get(day) > 0) {
+            else if (schedule.get(day) > 0) {
                 return day;
             }
             day++;

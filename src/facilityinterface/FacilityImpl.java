@@ -117,4 +117,9 @@ public class FacilityImpl implements Facility{
     public HashMap<String, Integer> getNeighbors() {
         return new HashMap<>(facilityNeighbors);
     }
+    
+    @Override
+    public FacilityDTO getFacilityDTO() {
+        return new FacilityDTO(facilityName, facilityRate, facilityCost);
+    }
 }
