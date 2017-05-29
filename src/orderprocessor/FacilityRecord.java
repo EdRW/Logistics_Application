@@ -30,13 +30,15 @@ package orderprocessor;
 public class FacilityRecord implements Comparable <FacilityRecord> {
     public String facilityName;
     public int quantityNeeded;
+    public double processingNumDays;
     public int processingEndDay;
     public int travelTime;
     public int arrivalDay;
     
-    FacilityRecord(String name, int items, int endDay, int tt) {
+    FacilityRecord(String name, int items, double processNumDays, int endDay, int tt) {
         facilityName = name;
         quantityNeeded = items;
+        processingNumDays = processNumDays;
         processingEndDay = endDay;
         travelTime = tt;
         arrivalDay = travelTime + processingEndDay;
@@ -51,6 +53,7 @@ public class FacilityRecord implements Comparable <FacilityRecord> {
         System.out.println("Facility Name: " + facilityName);
         System.out.println("Item Count: " + quantityNeeded);
         System.out.println("Travel Time: " + travelTime);
+        System.out.println("Processing Num Days: " + processingNumDays);
         System.out.println("Processing End Day: " + processingEndDay);
         System.out.println("Arrival Day: " + arrivalDay + "\n");
     }

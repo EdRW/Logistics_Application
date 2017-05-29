@@ -74,28 +74,41 @@ public class ScheduleImpl implements Schedule{
     @Override
    public int earliestAvailability() {
         // Returns the earlier day that production can begin
+//        int day = 1;
+//        Integer capacity = schedule.get(day);
+//        while ((capacity == 0) &&  (capacity != null)) {
+//            day++;
+//            capacity = schedule.get(day);
+//        }
+//        return day;
+
         int day = 1;
-        Integer capacity = schedule.get(day);
-        while ((capacity == 0) &&  (capacity != null)) {
+        while (true) {
+            if (!schedule.containsKey(day)) {
+                return day;
+            }
+            else if (schedule.containsKey(day) && schedule.get(day) > 0) {
+                return day;
+            }
             day++;
-            capacity = schedule.get(day);
         }
-        return day;
     }
 
     @Override
-    public int processingNumDays (int orderDay, int Qty) {
+    public double processingNumDays (int orderDay, int Qty) {
         //TODO Add neagative day exception
         int end = earliestAvailability();
-        int days = 0;
+        double days = 0;
         while (Qty > 0) {
             int capacity = daysCapacity(end);
             if (capacity != 0){
-                Qty -= (Qty >= capacity)? capacity :  Qty;
-                days++;
+                double qtyProcessed = (Qty >= capacity)? capacity :  Qty;
+                Qty -= qtyProcessed;
+                days += (qtyProcessed / rate);
             }
             end++;
         }
+        //System.out.println(days + " days");
         return days;
     }
     

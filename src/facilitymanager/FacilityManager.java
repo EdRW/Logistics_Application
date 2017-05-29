@@ -66,7 +66,7 @@ public class FacilityManager {
         
         for (String facilityName : facilityNetwork.keySet()) {
             Facility facility = facilityNetwork.get(facilityName);
-            if (facility.hasItem(itemName)) {
+            if (facility.hasItem(itemName) && facility.itemQuanity(itemName) > 0) {
                 facilitiesList.put(facilityName, facility.itemQuanity(itemName));
             }
         }
@@ -84,6 +84,10 @@ public class FacilityManager {
     
     public int processingEndDate(String facilityName, int orderDay, int qty){
         return facilityNetwork.get(facilityName).processingEndDate(orderDay, qty);
+    }
+    
+    public double processingNumDays(String facilityName, int orderDay, int qty) {
+        return facilityNetwork.get(facilityName).processingNumDays(orderDay, qty);
     }
     
     public void printFacilityReport(String facilityName) {

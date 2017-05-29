@@ -81,6 +81,11 @@ public class FacilityImpl implements Facility{
     }
     
     @Override
+    public double processingNumDays(int orderDay, int qty) {
+        return facilitySchedule.processingNumDays(orderDay, qty);
+    }
+    
+    @Override
     public void reduceInventory(String itemName, int itemQty){
         try {
             facilityInventory.removeItems(itemName, itemQty);

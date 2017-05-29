@@ -32,6 +32,6 @@ public interface Schedule {
     int daysCapacity(int day);
     int earliestAvailability();
     int processingEndDate (int orderDay, int Qty);
-    int processingNumDays (int orderDay, int Qty);
+    double processingNumDays (int orderDay, int Qty);
     int reserve (int orderDay, int Qty);
 }

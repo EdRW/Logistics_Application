@@ -45,4 +45,5 @@ public interface Facility {
     int updateSchedule(int orderDay, int qty);
     int processingEndDate(int orderDay, int qty);
     void reduceInventory(String itemName, int itemQty);
+    double processingNumDays(int orderDay, int qty);
 }
