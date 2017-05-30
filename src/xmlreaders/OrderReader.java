@@ -38,7 +38,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import orderinterface.Order;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import orderinterface.OrderImplFactory;
 
 /**
@@ -87,7 +87,7 @@ public class OrderReader {
                 // Get all noded named "Item" - there can be 0 or more
                 NodeList itemList = elem.getElementsByTagName("Item");
                 
-                HashMap<String, Integer> orderItems = new HashMap<>();
+                LinkedHashMap<String, Integer> orderItems = new LinkedHashMap<>();
                 
                 for (int j = 0; j < itemList.getLength(); j++) {
                     if(itemList.item(j).getNodeType() == Node.TEXT_NODE) {

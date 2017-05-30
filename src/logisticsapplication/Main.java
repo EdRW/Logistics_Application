@@ -24,9 +24,6 @@
 package logisticsapplication;
 
 import facilitymanager.FacilityManager;
-import itemcatalog.ItemCatalog;
-import shortestpathprocessor.ShortestPathProcessor;
-import ordermanager.OrderManager;
 import orderprocessor.OrderProcessor;
 
 /**
@@ -38,22 +35,15 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-
-        ItemCatalog ic = ItemCatalog.getInstance();
-//        ic.printReport();        
+    public static void main(String[] args) {        
 
         FacilityManager fm = FacilityManager.getInstance();
-//        fm.printReport();
-        
-        ShortestPathProcessor spp = ShortestPathProcessor.getInstance();
-//        spp.shortestPathTests();
-        
-        OrderManager om = OrderManager.getInstance();
-//        om.printReport();
+        fm.printReport();
         
         OrderProcessor op = OrderProcessor.getInstance();
         op.startOrderProcessing();
+        
+        fm.printReport();
     }
     
 }

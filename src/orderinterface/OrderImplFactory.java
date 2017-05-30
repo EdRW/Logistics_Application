@@ -23,7 +23,7 @@
  */
 package orderinterface;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 /**
@@ -32,7 +32,7 @@ import java.util.HashMap;
  */
 public class OrderImplFactory {
     // creates order impls
-    public static Order build(String iD, int day, String destination, HashMap<String, Integer> items) {
+    public static Order build(String iD, int day, String destination, LinkedHashMap<String, Integer> items) {
         return new OrderImpl(iD, day, destination, items);
     }
     

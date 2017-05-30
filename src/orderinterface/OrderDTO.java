@@ -23,7 +23,7 @@
  */
 package orderinterface;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -33,9 +33,9 @@ public class OrderDTO {
     public final String orderID;
     public final int orderDay;
     public final String orderDestination;
-    public final HashMap<String, Integer> itemInfo;
+    public final LinkedHashMap<String, Integer> itemInfo;
     
-    OrderDTO(String iD, int day, String destination, HashMap<String, Integer> items) {
+    OrderDTO(String iD, int day, String destination, LinkedHashMap<String, Integer> items) {
         orderID = iD;
         orderDay = day;
         orderDestination = destination;

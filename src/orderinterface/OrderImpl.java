@@ -23,7 +23,7 @@
  */
 package orderinterface;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 /**
  *
  * @author Camille Rose and Edmund Wright
@@ -32,9 +32,9 @@ public class OrderImpl implements Order {
     private final String orderID;
     private final int orderDay;
     private final String orderDestination;
-    private final HashMap<String, Integer> itemInfo;
+    private final LinkedHashMap<String, Integer> itemInfo;
     
-    OrderImpl(String iD, int day, String destination, HashMap<String, Integer> items){
+    OrderImpl(String iD, int day, String destination, LinkedHashMap<String, Integer> items){
         orderID = iD;
         orderDay = day;
         orderDestination = destination;
@@ -44,7 +44,7 @@ public class OrderImpl implements Order {
     @Override
     public OrderDTO getOrderDTO(){
         // TODO what do?
-        return new OrderDTO(orderID, orderDay, orderDestination, new HashMap<>(itemInfo));
+        return new OrderDTO(orderID, orderDay, orderDestination, new LinkedHashMap<String, Integer>(itemInfo));
     }
     
     
