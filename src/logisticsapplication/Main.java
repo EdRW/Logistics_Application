@@ -38,12 +38,12 @@ public class Main {
     public static void main(String[] args) {        
 
         FacilityManager fm = FacilityManager.getInstance();
-        fm.printReport();
+        //fm.printReport();
         
         OrderProcessor op = OrderProcessor.getInstance();
         op.startOrderProcessing();
         
-        fm.printReport();
+        //fm.printReport();
     }
     
 }

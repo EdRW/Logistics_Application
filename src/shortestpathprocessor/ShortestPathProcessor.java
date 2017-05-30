@@ -56,6 +56,7 @@ public class ShortestPathProcessor {
     public int bestPathTravelTime (String start, String end) throws CityNotFoundException {
         //TODO make this round up in days
         return (new Double(Math.ceil(sumPath(findBestPath(start, end))/400.0d))).intValue();
+        //return (new Double (sumPath(findBestPath(start, end))/400.0d)).intValue();
     }
     
     private ArrayList<String> findBestPath(String start, String end) throws CityNotFoundException {

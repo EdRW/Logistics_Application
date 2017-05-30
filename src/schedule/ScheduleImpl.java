@@ -87,7 +87,7 @@ public class ScheduleImpl implements Schedule{
             if (!schedule.containsKey(day)) {
                 return day;
             }
-            else if (schedule.get(day) > 0) {
+            else if (schedule.containsKey(day) && schedule.get(day) > 0) {
                 return day;
             }
             day++;
@@ -102,11 +102,26 @@ public class ScheduleImpl implements Schedule{
         while (Qty > 0) {
             int capacity = daysCapacity(end);
             if (capacity != 0){
-                double qtyProcessed = (Qty >= capacity)? capacity :  Qty;
-                Qty -= qtyProcessed;
-                days += (qtyProcessed / rate);
+//                double qtyProcessed = (Qty > capacity)? capacity :  Qty;
+//                Qty -= qtyProcessed;
+//                days += (qtyProcessed / rate);
+//            }
+//            end++;
+                if (Qty > capacity) {
+                    double qtyProcessed = capacity;
+                    Qty -= capacity;
+                    days += (qtyProcessed/rate);
+                    end++;
+                }
+                else{
+                    double qtyProcessed = Qty;
+                    Qty -= Qty;
+                    days += (qtyProcessed/rate);
+                }
             }
-            end++;
+            else {
+                end++;
+            }
         }
         //System.out.println(days + " days");
         return days;
@@ -115,14 +130,27 @@ public class ScheduleImpl implements Schedule{
     @Override
     public int processingEndDate (int orderDay, int Qty) {
         //TODO Add neagative day exception
+        //System.out.println("NEW END DAY CALL");
+        //System.out.println("RATE: " + rate);
         int end = orderDay;
         while (Qty > 0) {
+            //System.out.println("QTY: " + Qty);
             int capacity = daysCapacity(end);
             if (capacity != 0){
-                Qty -= (Qty >= capacity)? capacity :  Qty;
+                //Qty -= (Qty >= capacity)? capacity :  Qty;
+                if (Qty > capacity) {
+                    Qty -= capacity;
+                    end++;
+                }
+                else {
+                    Qty -= Qty;
+                }
             }
-            end++;
+            else {
+                end++;
+            }
         }
+        //System.out.println("END: " + end + "\n");
         return end;
     }
     
@@ -133,16 +161,19 @@ public class ScheduleImpl implements Schedule{
         while (Qty > 0) {
             int capacity = daysCapacity(end);
             if (capacity != 0){
-                if (Qty >= capacity) {
+                if (Qty > capacity) {
                     Qty -= capacity;
                     schedule.put(end, 0);
+                    end++;
                 }
                 else {
                     schedule.put(end, capacity - Qty);
                     Qty -= Qty;
                 }
             }
-            end++;
+            else {
+              end++;  
+            }
         }
         return end;
     }

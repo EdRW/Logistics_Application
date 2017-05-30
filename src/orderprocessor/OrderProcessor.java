@@ -95,25 +95,32 @@ public class OrderProcessor {
         
         //sort by shortest travel time
         Collections.sort(facilityRecords);
-
-        for (FacilityRecord facilityRecord : facilityRecords){
-
-            if (orderItemQuantityRemaining > 0){
+//        System.out.println("SORTED FRS:" +  order.orderID);
+//        for (FacilityRecord fr : facilityRecords) {
+//            fr.print();
+//        }
+          FacilityRecord facilityRecord = facilityRecords.get(0);
+//        for (FacilityRecord facilityRecord : facilityRecords){
+//
+//            if (orderItemQuantityRemaining > 0){
                 int facilityQty = facilitiesWithItem.get(facilityRecord.facilityName);
                 
                 facilityRecord.quantityNeeded = Math.min(orderItemQuantityRemaining, facilityQty);
                 
                 facilityManager.reduceInventory(facilityRecord.facilityName, itemName, facilityRecord.quantityNeeded);
-                facilityManager.updateSchedule(facilityRecord.facilityName, order.orderDay, facilityRecord.quantityNeeded);
+                facilityRecord.processingNumDays = facilityManager.processingNumDays(facilityRecord.facilityName, order.orderDay, facilityRecord.quantityNeeded);
+                facilityRecord.processingEndDay = facilityManager.updateSchedule(facilityRecord.facilityName, order.orderDay, facilityRecord.quantityNeeded);
+                facilityRecord.arrivalDay = facilityRecord.travelTime + facilityRecord.processingEndDay;
                 
                 orderItemSolutionList.add(facilityRecord);
 
                 orderItemQuantityRemaining -= facilityRecord.quantityNeeded;
-            }
-            else {
-                break;
-            }
-        }
+//            }
+//            else {
+//                break;
+//            }
+//        }
+        
         if (orderItemQuantityRemaining > 0){
             //There are still items need for some reason. Do a recursive call to process those items.
             processOrder(itemName, orderItemQuantityRemaining, order, orderItemSolutionList);
@@ -124,6 +131,8 @@ public class OrderProcessor {
         int orderIndex = 0;
         OrderDTO order;
         
+//        while (orderIndex < 2) {
+//            order = getOrder(orderIndex);
         while ((order = getOrder(orderIndex)) != null) {
             LinkedHashMap<String, ArrayList<FacilityRecord>> completeOrderSolution = new LinkedHashMap<>();
             
@@ -149,6 +158,9 @@ public class OrderProcessor {
             orderSolutionReport(orderIndex, order, completeOrderSolution);
             
             orderIndex++;
+            
+//            FacilityManager fm = FacilityManager.getInstance();
+//            fm.printReport();
         }
     }
     
@@ -197,12 +209,13 @@ public class OrderProcessor {
             }
     
             for (FacilityRecord facilityRecord : completeOrderSolution.get(itemName)) {
-                int facilityCost = 0;
+                //int facilityCost = 0;
                 if (facilityManager.facilityExists(facilityRecord.facilityName)) {
-                    facilityCost = facilityManager.getFacilityDTO(facilityRecord.facilityName).facilityCost;
-                    recordCost = (itemCost * facilityRecord.quantityNeeded) + (facilityRecord.processingNumDays * facilityCost) + (facilityRecord.travelTime * 500);
+                    int facilityCost = facilityManager.getFacilityDTO(facilityRecord.facilityName).facilityCost;
+                    recordCost = (itemCost * facilityRecord.quantityNeeded) + (facilityRecord.processingNumDays * facilityCost) + (facilityRecord.travelTime * 500.00);
                     arrivalDayList.add(facilityRecord.arrivalDay);
                     System.out.printf(indent2 + "%d) %-25s%-15d%11s\t\t%d\n", count, facilityRecord.facilityName, facilityRecord.quantityNeeded, decimalFormat.format(recordCost), facilityRecord.arrivalDay);
+                    //facilityRecord.print();
                 }
                 else {
                     recordCost = 0;
