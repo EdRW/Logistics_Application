@@ -43,14 +43,12 @@ public class OrderImpl implements Order {
     
     @Override
     public OrderDTO getOrderDTO(){
-        // TODO what do?
         return new OrderDTO(orderID, orderDay, orderDestination, new LinkedHashMap<String, Integer>(itemInfo));
     }
     
     
     @Override
     public void printReport() {
-        // TODO update to use print format instead of spaces
         System.out.println("     Order ID: " + orderID);
         System.out.println("     Order Time: " + orderDay + "\n     Destination: " + orderDestination + "\n");
         System.out.println("     List of Order Items:");

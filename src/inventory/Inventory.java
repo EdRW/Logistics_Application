@@ -23,7 +23,7 @@
  */
 package inventory;
 
-import customexceptions.QuantityException;
+import customexceptions.ItemQuantityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -47,10 +47,11 @@ public class Inventory {
         return (inventory.containsKey(item));
     }
     
-    public int removeItems(String item, Integer requestedQty) throws QuantityException {
+    public int removeItems(String item, Integer requestedQty) throws ItemQuantityException {
         Integer currQty = inventory.get(item);
+        
         if (requestedQty > currQty) {
-            throw new QuantityException("The requested quantity: " + requestedQty + " is more than available.");
+            throw new ItemQuantityException("The requested quantity: " + requestedQty + " is more than available inventory.");
         }
         currQty -= requestedQty;
         inventory.put(item, currQty);

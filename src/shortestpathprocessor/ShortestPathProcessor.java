@@ -54,19 +54,16 @@ public class ShortestPathProcessor {
     }
     
     public int bestPathTravelTime (String start, String end) throws CityNotFoundException {
-        //TODO make this round up in days
-        return (new Double(Math.ceil(sumPath(findBestPath(start, end))/400.0d))).intValue();
-        //return (new Double (sumPath(findBestPath(start, end))/400.0d)).intValue();
-    }
-    
-    private ArrayList<String> findBestPath(String start, String end) throws CityNotFoundException {
         if (!FacilityManager.getInstance().facilityExists(start)) {
             throw new CityNotFoundException("Invalid city name: " + start);
         }
         if (!FacilityManager.getInstance().facilityExists(end)) {
             throw new CityNotFoundException("Invalid city name: " + end);
         }
-
+        return (new Double(Math.ceil(sumPath(findBestPath(start, end))/400.0d))).intValue();
+    }
+    
+    private ArrayList<String> findBestPath(String start, String end) throws CityNotFoundException {
         mapPairs(start);
         
         ArrayList<String> pathList = new ArrayList<>();
@@ -80,7 +77,7 @@ public class ShortestPathProcessor {
         
     }
     
-    private void mapPairs(String start) {
+    private void mapPairs(String start) throws CityNotFoundException {        
         seen.add(start);
         
         FacilityManager facilityManager = FacilityManager.getInstance();
@@ -97,7 +94,7 @@ public class ShortestPathProcessor {
 
     }
     
-    private void findPaths(String start, String end, ArrayList<String> pathList) {
+    private void findPaths(String start, String end, ArrayList<String> pathList) {       
         if (start.equals(end)) {
             if (lowPath.isEmpty()) {
                 lowPath = pathList;

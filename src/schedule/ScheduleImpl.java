@@ -23,6 +23,7 @@
  */
 package schedule;
 
+import customexceptions.InvalidScheduleDayException;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -31,7 +32,6 @@ import java.util.HashMap;
  * @author Edmund Wright and Camille Rose
  */
 
-// TODO Add exceptions for if someone requests an order day that is less than 1
 public class ScheduleImpl implements Schedule{
     
     private final HashMap<Integer, Integer> schedule;
@@ -73,15 +73,7 @@ public class ScheduleImpl implements Schedule{
     
     @Override
    public int earliestAvailability() {
-        // Returns the earlier day that production can begin
-//        int day = 1;
-//        Integer capacity = schedule.get(day);
-//        while ((capacity == 0) &&  (capacity != null)) {
-//            day++;
-//            capacity = schedule.get(day);
-//        }
-//        return day;
-        //TODO make this presentable...
+        // Returns the earliert day that production can begin
         int day = 1;
         while (true) {
             if (!schedule.containsKey(day)) {
@@ -96,17 +88,11 @@ public class ScheduleImpl implements Schedule{
 
     @Override
     public double processingNumDays (int orderDay, int Qty) {
-        //TODO Add neagative day exception
         int end = earliestAvailability();
         double days = 0;
         while (Qty > 0) {
             int capacity = daysCapacity(end);
             if (capacity != 0){
-//                double qtyProcessed = (Qty > capacity)? capacity :  Qty;
-//                Qty -= qtyProcessed;
-//                days += (qtyProcessed / rate);
-//            }
-//            end++;
                 if (Qty > capacity) {
                     double qtyProcessed = capacity;
                     Qty -= capacity;
@@ -123,21 +109,15 @@ public class ScheduleImpl implements Schedule{
                 end++;
             }
         }
-        //System.out.println(days + " days");
         return days;
     }
     
     @Override
     public int processingEndDate (int orderDay, int Qty) {
-        //TODO Add neagative day exception
-        //System.out.println("NEW END DAY CALL");
-        //System.out.println("RATE: " + rate);
         int end = orderDay;
         while (Qty > 0) {
-            //System.out.println("QTY: " + Qty);
             int capacity = daysCapacity(end);
             if (capacity != 0){
-                //Qty -= (Qty >= capacity)? capacity :  Qty;
                 if (Qty > capacity) {
                     Qty -= capacity;
                     end++;
@@ -150,13 +130,11 @@ public class ScheduleImpl implements Schedule{
                 end++;
             }
         }
-        //System.out.println("END: " + end + "\n");
         return end;
     }
     
     @Override
     public int reserve (int orderDay, int Qty) {
-        //TODO Add neagative day exception
         int end = orderDay;
         while (Qty > 0) {
             int capacity = daysCapacity(end);

@@ -23,6 +23,8 @@
  */
 package facilityinterface;
 
+import customexceptions.FacilityInventoryOverwriteException;
+import customexceptions.ItemQuantityException;
 import java.util.HashMap;
 
 /**
@@ -38,13 +40,13 @@ public interface Facility {
      * @return HashMap with the name of each neighbor's name and the distance to it.
      */
     HashMap<String, Integer> getNeighbors();
-    void loadInventory(HashMap<String, Integer> inventory);
+    void loadInventory(HashMap<String, Integer> inventory) throws FacilityInventoryOverwriteException;
     int itemQuanity (String itemName);
     boolean hasItem (String itemName);
     void printReport();
     int updateSchedule(int orderDay, int qty);
     int processingEndDate(int orderDay, int qty);
-    void reduceInventory(String itemName, int itemQty);
+    void reduceInventory(String itemName, int itemQty) throws ItemQuantityException;
     double processingNumDays(int orderDay, int qty);
     FacilityDTO getFacilityDTO();
 }

@@ -23,6 +23,7 @@
  */
 package ordermanager;
 
+import customexceptions.OrderNotFoundException;
 import java.util.ArrayList;
 import orderinterface.Order;
 import orderinterface.OrderDTO;
@@ -48,13 +49,15 @@ public class OrderManager {
     return instance;
     }
     
-    public OrderDTO getOrderDTO(int orderIndex) {
-        OrderDTO returnVal = null;
-        if (orderIndex < orderList.size()) {
-            // TODO create a custom exception for this in package custom exceptions?
-            returnVal = orderList.get(orderIndex).getOrderDTO();
+    public int totalNumOrders() {
+        return orderList.size();
+    }
+    
+    public OrderDTO getOrderDTO(int orderIndex) throws OrderNotFoundException {
+        if (orderIndex > orderList.size()) {
+            throw new OrderNotFoundException("Order: " + orderIndex + " not found in Order Manager"); 
         }
-        return returnVal;
+        return orderList.get(orderIndex).getOrderDTO();
     }
     
     public void printReport() {

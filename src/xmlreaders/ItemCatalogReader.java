@@ -86,7 +86,6 @@ public class ItemCatalogReader {
             return items;
         } catch (XMLFileNotFoundException | XMLUnexpectedNodeException | ParserConfigurationException | SAXException | IOException | DOMException e) {
             e.printStackTrace();
-            // TODO returning null seems like a bad idea. Not sure what to do...
             return null;
         }
     }

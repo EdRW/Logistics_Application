@@ -36,14 +36,12 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {        
+        
+        FacilityManager.getInstance().printReport();
+        
+        OrderProcessor.getInstance().startOrderProcessing();
 
-        FacilityManager fm = FacilityManager.getInstance();
-        //fm.printReport();
-        
-        OrderProcessor op = OrderProcessor.getInstance();
-        op.startOrderProcessing();
-        
-        //fm.printReport();
+        FacilityManager.getInstance().printReport();
     }
     
 }

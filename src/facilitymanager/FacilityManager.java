@@ -24,8 +24,12 @@
 package facilitymanager;
 
 import customexceptions.CityNotFoundException;
+import customexceptions.InvalidScheduleDayException;
+import customexceptions.ItemNotFoundException;
+import customexceptions.ItemQuantityException;
 import facilityinterface.Facility;
 import facilityinterface.FacilityDTO;
+import itemcatalog.ItemCatalog;
 import java.util.HashMap;
 import xmlreaders.FacilityInventoryReader;
 import xmlreaders.TransportNetworkReader;
@@ -34,8 +38,6 @@ import xmlreaders.TransportNetworkReader;
  *
  * @author Edmund Wright and Camille Rose
  */
-
-// TODO All of these public methods need exceptions
 
 public class FacilityManager {
     // This class uses singleton design pattern
@@ -59,15 +61,24 @@ public class FacilityManager {
         return facilityNetwork.containsKey(facilityName);
     }
     
-    public HashMap<String, Integer> getNeighbors(String facilityName) {
+    public HashMap<String, Integer> getNeighbors(String facilityName) throws CityNotFoundException {
+        if (!facilityExists(facilityName)){
+            throw new CityNotFoundException(facilityName + " is not a valid Facility name");
+        }
         return facilityNetwork.get(facilityName).getNeighbors();
     }
     
-    public FacilityDTO getFacilityDTO(String facilityName) {
+    public FacilityDTO getFacilityDTO(String facilityName) throws CityNotFoundException {
+        if (!facilityExists(facilityName)){
+            throw new CityNotFoundException(facilityName + " is not a valid Facility name");
+        }
         return facilityNetwork.get(facilityName).getFacilityDTO();
     }
     
-    public HashMap<String, Integer> facilitiesWithItem(String itemName) {
+    public HashMap<String, Integer> facilitiesWithItem(String itemName) throws ItemNotFoundException {
+        if (!ItemCatalog.getInstance().itemExists(itemName)){
+            throw new ItemNotFoundException(itemName + "does not exist in Item Catalog");
+        }
         HashMap<String, Integer> facilitiesList = new HashMap<>();
         
         for (String facilityName : facilityNetwork.keySet()) {
@@ -80,23 +91,62 @@ public class FacilityManager {
         return facilitiesList;
     }
     
-    public void reduceInventory(String facilityName, String itemName, int itemQty) {
+    public void reduceInventory(String facilityName, String itemName, int itemQty) throws CityNotFoundException, ItemQuantityException, ItemNotFoundException {
+        if (itemQty < 0) {
+            throw new ItemQuantityException("The requested quantity: " + itemQty + " is less than zero and cannot be handled.");
+        }
+        if (!ItemCatalog.getInstance().itemExists(itemName)){
+            throw new ItemNotFoundException(itemName + "does not exist in Item Catalog");
+        }
+        if (!facilityExists(facilityName)){
+            throw new CityNotFoundException(facilityName + " is not a valid Facility name");
+        }
         facilityNetwork.get(facilityName).reduceInventory(itemName, itemQty);
     }
     
-    public int updateSchedule(String facilityName, int orderDay, int qty) {
+    public int updateSchedule(String facilityName, int orderDay, int qty) throws InvalidScheduleDayException, ItemQuantityException, CityNotFoundException {
+        if (qty < 0) {
+            throw new ItemQuantityException("The requested quantity: " + qty + " is less than zero and cannot be handled.");
+        }
+        if (orderDay < 1) {
+            throw new InvalidScheduleDayException("Day " + orderDay + " is not a valid schedule day." );
+        }
+        if (!facilityExists(facilityName)){
+            throw new CityNotFoundException(facilityName + " is not a valid Facility name");
+        }
         return facilityNetwork.get(facilityName).updateSchedule(orderDay, qty);
     }
     
-    public int processingEndDate(String facilityName, int orderDay, int qty){
+    public int processingEndDate(String facilityName, int orderDay, int qty)throws InvalidScheduleDayException, ItemQuantityException, CityNotFoundException {
+        if (qty < 0) {
+            throw new ItemQuantityException("The requested quantity: " + qty + " is less than zero and cannot be handled.");
+        }
+        if (orderDay < 1) {
+            throw new InvalidScheduleDayException("Day " + orderDay + " is not a valid schedule day." );
+        }
+        if (!facilityExists(facilityName)){
+            throw new CityNotFoundException(facilityName + " is not a valid Facility name");
+        }
         return facilityNetwork.get(facilityName).processingEndDate(orderDay, qty);
     }
     
-    public double processingNumDays(String facilityName, int orderDay, int qty) {
+    public double processingNumDays(String facilityName, int orderDay, int qty) throws InvalidScheduleDayException, ItemQuantityException, CityNotFoundException {
+        if (qty < 0) {
+            throw new ItemQuantityException("The requested quantity: " + qty + " is less than zero and cannot be handled.");
+        }
+        if (orderDay < 1) {
+            throw new InvalidScheduleDayException("Day " + orderDay + " is not a valid schedule day." );
+        }
+        if (!facilityExists(facilityName)){
+            throw new CityNotFoundException(facilityName + " is not a valid Facility name");
+        }
         return facilityNetwork.get(facilityName).processingNumDays(orderDay, qty);
     }
     
-    public void printFacilityReport(String facilityName) {
+    public void printFacilityReport(String facilityName) throws CityNotFoundException {
+        if (!facilityExists(facilityName)){
+            throw new CityNotFoundException(facilityName + " is not a valid Facility name");
+        }
         facilityNetwork.get(facilityName).printReport();
     }
     public void printReport() {

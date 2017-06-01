@@ -21,20 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package schedule;
-
-import customexceptions.InvalidScheduleDayException;
-import customexceptions.ItemQuantityException;
+package customexceptions;
 
 /**
  *
  * @author Edmund Wright and Camille Rose
  */
-public interface Schedule {
-    void printReport();
-    int daysCapacity(int day) throws InvalidScheduleDayException;
-    int earliestAvailability();
-    int processingEndDate (int orderDay, int Qty);
-    double processingNumDays (int orderDay, int Qty);
-    int reserve (int orderDay, int Qty);
+public class OrderNotFoundException extends Exception {
+    public OrderNotFoundException(String msg) {
+        super(msg);
+    }
+    
 }

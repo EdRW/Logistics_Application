@@ -89,19 +89,5 @@
 			<QTY>200</QTY>
 		</Item>
 	</Order>
-        
-        <Order>
-		<ID>TO-007</ID>
-		<Day>1</Day>
-		<Destination>Denver, CO</Destination>
-		<Item>
-			<Name>CT3928</Name>
-			<QTY>120</QTY>
-		</Item>
-		<Item>
-			<Name>MM35P</Name>
-			<QTY>2000</QTY>
-		</Item>
-	</Order>
-	
+
 </Orders>

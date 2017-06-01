@@ -27,8 +27,8 @@ package customexceptions;
  *
  * @author Camille Rose and Edmund Wright.
  */
-public class QuantityException extends Exception {
-    public QuantityException(String msg) {
+public class ItemQuantityException extends Exception {
+    public ItemQuantityException(String msg) {
         super(msg);
     }
 }

@@ -23,7 +23,9 @@
  */
 package facilityinterface;
 
-import customexceptions.QuantityException;
+import customexceptions.FacilityInventoryOverwriteException;
+import customexceptions.InvalidScheduleDayException;
+import customexceptions.ItemQuantityException;
 import inventory.Inventory;
 import java.util.HashMap;
 import schedule.Schedule;
@@ -42,7 +44,6 @@ public class FacilityImpl implements Facility{
     private  Schedule facilitySchedule;
     
     FacilityImpl(String name, int rate, int cost, HashMap<String, Integer> neighbors){
-        // TODO add parameter error checking
         facilityName = name;
         facilityRate = rate;
         facilityCost = cost;
@@ -51,12 +52,12 @@ public class FacilityImpl implements Facility{
     }
      
     @Override
-    public void loadInventory(HashMap<String, Integer> inventory){
+    public void loadInventory(HashMap<String, Integer> inventory) throws FacilityInventoryOverwriteException{
         if (facilityInventory == null) {
             facilityInventory = new Inventory(inventory);
         }
         else{
-            //TODO throw an exception
+            throw new FacilityInventoryOverwriteException("Attempted to overwrite the inventory of Facility " + facilityName);
         }
     }
     
@@ -86,12 +87,8 @@ public class FacilityImpl implements Facility{
     }
     
     @Override
-    public void reduceInventory(String itemName, int itemQty){
-        try {
-            facilityInventory.removeItems(itemName, itemQty);
-        } catch (QuantityException e) {
-            e.printStackTrace();
-        }
+    public void reduceInventory(String itemName, int itemQty)throws ItemQuantityException {
+        facilityInventory.removeItems(itemName, itemQty);
     }
     
     @Override

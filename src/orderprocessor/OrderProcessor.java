@@ -24,7 +24,10 @@
 package orderprocessor;
 
 import customexceptions.CityNotFoundException;
+import customexceptions.InvalidScheduleDayException;
 import customexceptions.ItemNotFoundException;
+import customexceptions.ItemQuantityException;
+import customexceptions.OrderNotFoundException;
 import facilitymanager.FacilityManager;
 import itemcatalog.ItemCatalog;
 import java.text.DecimalFormat;
@@ -53,7 +56,7 @@ public class OrderProcessor {
         return instance;
     }
     
-    private OrderDTO getOrder(int orderIndex){
+    private OrderDTO getOrder(int orderIndex) throws OrderNotFoundException{
         return OrderManager.getInstance().getOrderDTO(orderIndex);
     }
     
@@ -62,110 +65,91 @@ public class OrderProcessor {
     }
     
     private void processOrder(String itemName, int orderItemQuantityRemaining, OrderDTO order, ArrayList<FacilityRecord> orderItemSolutionList) {
-        
-        FacilityManager facilityManager = FacilityManager.getInstance();
-        HashMap <String, Integer> facilitiesWithItem = facilityManager.facilitiesWithItem(itemName);
-        
-        // remove destination city from facilities with item list
-        if (facilitiesWithItem.containsKey(order.orderDestination)) {
-            facilitiesWithItem.remove(order.orderDestination);
-        }
-        // No facilities have the item in stock
-        if (facilitiesWithItem.isEmpty()) {
-            backOrderReport(itemName, orderItemQuantityRemaining, orderItemSolutionList);
-            return;
-        }
-        
-        ArrayList<FacilityRecord> facilityRecords = new ArrayList<>();
-        for (String currentFacility : facilitiesWithItem.keySet()) {
-            int facilityQty = facilitiesWithItem.get(currentFacility);
-            int quantityNeeded = Math.min(orderItemQuantityRemaining, facilityQty);
-            
-            try {
+        try {
+            FacilityManager facilityManager = FacilityManager.getInstance();
+            HashMap <String, Integer> facilitiesWithItem = facilityManager.facilitiesWithItem(itemName);
+
+            // remove destination city from facilities with item list
+            if (facilitiesWithItem.containsKey(order.orderDestination)) {
+                facilitiesWithItem.remove(order.orderDestination);
+            }
+            // No facilities have the item in stock
+            if (facilitiesWithItem.isEmpty()) {
+                backOrderReport(itemName, orderItemQuantityRemaining, orderItemSolutionList);
+                return;
+            }
+
+            ArrayList<FacilityRecord> facilityRecords = new ArrayList<>();
+            for (String currentFacility : facilitiesWithItem.keySet()) {
+                int facilityQty = facilitiesWithItem.get(currentFacility);
+                int quantityNeeded = Math.min(orderItemQuantityRemaining, facilityQty);         
                 int travelTime = ShortestPathProcessor.getInstance().bestPathTravelTime(currentFacility, order.orderDestination);
                 int processingEndDay = facilityManager.processingEndDate(currentFacility, order.orderDay, quantityNeeded);
                 double processingNumDays = facilityManager.processingNumDays(currentFacility, order.orderDay, quantityNeeded);
 
                 facilityRecords.add(new FacilityRecord(currentFacility, quantityNeeded, processingNumDays, processingEndDay, travelTime));
-
-            } catch (CityNotFoundException e) {
-                e.printStackTrace();
             }
-        }
-        
-        //sort by shortest travel time
-        Collections.sort(facilityRecords);
-//        System.out.println("SORTED FRS:" +  order.orderID);
-//        for (FacilityRecord fr : facilityRecords) {
-//            fr.print();
-//        }
-          FacilityRecord facilityRecord = facilityRecords.get(0);
-//        for (FacilityRecord facilityRecord : facilityRecords){
-//
-//            if (orderItemQuantityRemaining > 0){
-                int facilityQty = facilitiesWithItem.get(facilityRecord.facilityName);
-                
-                facilityRecord.quantityNeeded = Math.min(orderItemQuantityRemaining, facilityQty);
-                
-                facilityManager.reduceInventory(facilityRecord.facilityName, itemName, facilityRecord.quantityNeeded);
-                facilityRecord.processingNumDays = facilityManager.processingNumDays(facilityRecord.facilityName, order.orderDay, facilityRecord.quantityNeeded);
-                facilityRecord.processingEndDay = facilityManager.updateSchedule(facilityRecord.facilityName, order.orderDay, facilityRecord.quantityNeeded);
-                facilityRecord.arrivalDay = facilityRecord.travelTime + facilityRecord.processingEndDay;
-                
-                orderItemSolutionList.add(facilityRecord);
 
-                orderItemQuantityRemaining -= facilityRecord.quantityNeeded;
-//            }
-//            else {
-//                break;
-//            }
-//        }
-        
-        if (orderItemQuantityRemaining > 0){
-            //There are still items need for some reason. Do a recursive call to process those items.
-            processOrder(itemName, orderItemQuantityRemaining, order, orderItemSolutionList);
+            //sort by shortest travel time
+            Collections.sort(facilityRecords);
+
+            FacilityRecord facilityRecord = facilityRecords.get(0);
+
+            int facilityQty = facilitiesWithItem.get(facilityRecord.facilityName);
+
+            facilityRecord.quantityNeeded = Math.min(orderItemQuantityRemaining, facilityQty);
+            facilityManager.reduceInventory(facilityRecord.facilityName, itemName, facilityRecord.quantityNeeded);
+            facilityRecord.processingNumDays = facilityManager.processingNumDays(facilityRecord.facilityName, order.orderDay, facilityRecord.quantityNeeded);
+            facilityRecord.processingEndDay = facilityManager.updateSchedule(facilityRecord.facilityName, order.orderDay, facilityRecord.quantityNeeded);
+            facilityRecord.arrivalDay = facilityRecord.travelTime + facilityRecord.processingEndDay;
+
+            orderItemSolutionList.add(facilityRecord);
+            orderItemQuantityRemaining -= facilityRecord.quantityNeeded;
+
+            if (orderItemQuantityRemaining > 0){
+                processOrder(itemName, orderItemQuantityRemaining, order, orderItemSolutionList);
+            }
+            
+        }catch (ItemNotFoundException | ItemQuantityException | CityNotFoundException | InvalidScheduleDayException e) {
+           e.printStackTrace(); 
         }
     }
     
     public void startOrderProcessing() {
         int orderIndex = 0;
-        OrderDTO order;
-        
-//        while (orderIndex < 2) {
-//            order = getOrder(orderIndex);
-        while ((order = getOrder(orderIndex)) != null) {
-            LinkedHashMap<String, ArrayList<FacilityRecord>> completeOrderSolution = new LinkedHashMap<>();
-            
-            for (String itemName : order.itemInfo.keySet()) {
-                if (!ItemCatalog.getInstance().itemExists(itemName)) {
-                    //TODO throw exception item does not exist
-                    ArrayList<FacilityRecord> rejectedRecordList = new ArrayList<>();
-                    FacilityRecord rejectedRecord = new FacilityRecord("*DOES NOT EXIST*", 0, 0, 0, 0);
-                    rejectedRecordList.add(rejectedRecord);
-                    completeOrderSolution.put(itemName, rejectedRecordList);
-                    continue;
-                }   
-                else {
-                    // item does exist
-                    ArrayList<FacilityRecord> orderItemSolutionList = new ArrayList<>();
-                    
-                    processOrder(itemName, order.itemInfo.get(itemName), order, orderItemSolutionList);
-                    
-                    completeOrderSolution.put(itemName, orderItemSolutionList);
-                
+        OrderManager ordermanager = OrderManager.getInstance();
+        try {
+            while (orderIndex < ordermanager.totalNumOrders()) {
+                OrderDTO order = ordermanager.getOrderDTO(orderIndex);
+                LinkedHashMap<String, ArrayList<FacilityRecord>> completeOrderSolution = new LinkedHashMap<>();
+
+                for (String itemName : order.itemInfo.keySet()) {
+                    if (!ItemCatalog.getInstance().itemExists(itemName)) {
+                        ArrayList<FacilityRecord> rejectedRecordList = new ArrayList<>();
+                        FacilityRecord rejectedRecord = new FacilityRecord("*DOES NOT EXIST*", 0, 0, 0, 0);
+                        rejectedRecordList.add(rejectedRecord);
+                        completeOrderSolution.put(itemName, rejectedRecordList);
+                        continue;
+                    }   
+                    else {
+                        // item does exist
+                        ArrayList<FacilityRecord> orderItemSolutionList = new ArrayList<>();
+
+                        processOrder(itemName, order.itemInfo.get(itemName), order, orderItemSolutionList);
+
+                        completeOrderSolution.put(itemName, orderItemSolutionList);
+                    }
                 }
+                orderSolutionReport(orderIndex, order, completeOrderSolution);
+
+                orderIndex++;
             }
-            orderSolutionReport(orderIndex, order, completeOrderSolution);
-            
-            orderIndex++;
-            
-//            FacilityManager fm = FacilityManager.getInstance();
-//            fm.printReport();
+        }catch (OrderNotFoundException e){
+            e.printStackTrace();
         }
     }
     
     private void orderSolutionReport(int orderNum, OrderDTO order, LinkedHashMap<String, ArrayList<FacilityRecord>> completeOrderSolution) {
-        //TODO add something that prints backorders and rejected items
         FacilityManager facilityManager = FacilityManager.getInstance();
         ItemCatalog itemCatalog = ItemCatalog.getInstance();
         DecimalFormat decimalFormat = new DecimalFormat ("$#,###.00");
@@ -204,24 +188,28 @@ public class OrderProcessor {
             int totalRecordQty = 0;
             ArrayList<Integer> arrivalDayList = new ArrayList<>();
             
-            if (itemCatalog.itemExists(itemName)) {
+            try {
                 itemCost = itemCatalog.getPrice(itemName);
+            } catch (ItemNotFoundException e){
+                //Nothing to do here
             }
     
             for (FacilityRecord facilityRecord : completeOrderSolution.get(itemName)) {
-                //int facilityCost = 0;
+                int facilityCost = 0;
                 if (facilityManager.facilityExists(facilityRecord.facilityName)) {
-                    int facilityCost = facilityManager.getFacilityDTO(facilityRecord.facilityName).facilityCost;
+                    try {
+                        facilityCost = facilityManager.getFacilityDTO(facilityRecord.facilityName).facilityCost;
+                    }catch (CityNotFoundException e) {
+                        //Nothing to do here
+                    }
                     recordCost = (itemCost * facilityRecord.quantityNeeded) + (facilityRecord.processingNumDays * facilityCost) + (facilityRecord.travelTime * 500.00);
                     arrivalDayList.add(facilityRecord.arrivalDay);
-                    System.out.printf(indent2 + "%d) %-25s%-15d%11s\t\t%d\n", count, facilityRecord.facilityName, facilityRecord.quantityNeeded, decimalFormat.format(recordCost), facilityRecord.arrivalDay);
-                    //facilityRecord.print();
+                    System.out.printf(indent2 + "%d) %-25s%-15d%11s\t\t%d\n", count, facilityRecord.facilityName, facilityRecord.quantityNeeded, decimalFormat.format(recordCost), facilityRecord.arrivalDay);    
                 }
                 else {
                     recordCost = 0;
                     System.out.printf(indent2 + "%d) %-25s%-15d%11s\t\t%s\n", count, facilityRecord.facilityName, facilityRecord.quantityNeeded, "N/A", "N/A");
                 }
-                
                 totalRecordQty += facilityRecord.quantityNeeded;
                 totalRecordCost += recordCost;
                 totalCost += recordCost;

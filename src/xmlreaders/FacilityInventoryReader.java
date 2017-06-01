@@ -23,6 +23,7 @@
  */
 package xmlreaders;
 
+import customexceptions.FacilityInventoryOverwriteException;
 import customexceptions.XMLFileNotFoundException;
 import customexceptions.XMLUnexpectedNodeException;
 import facilityinterface.Facility;
@@ -103,7 +104,7 @@ public class FacilityInventoryReader {
                 }
                 facilityNetwork.get(facilityName).loadInventory(inventory);
             }    
-        } catch (XMLFileNotFoundException | XMLUnexpectedNodeException | ParserConfigurationException | SAXException | IOException | DOMException e) {
+        } catch (XMLFileNotFoundException | XMLUnexpectedNodeException | ParserConfigurationException | SAXException | IOException | DOMException | FacilityInventoryOverwriteException e) {
             e.printStackTrace();
         }
     } 

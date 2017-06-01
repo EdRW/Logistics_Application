@@ -46,12 +46,15 @@ public class FacilityRecord implements Comparable <FacilityRecord> {
 
     @Override
     public int compareTo(FacilityRecord fr) {
-        return arrivalDay - fr.arrivalDay;
+        //return arrivalDay - fr.arrivalDay;
+        if (arrivalDay > fr.arrivalDay) return 1;
+        else if (arrivalDay < fr.arrivalDay) return -1;
+        else return 0;
     }
     
     public void print(){
         System.out.println("Facility Name: " + facilityName);
-        System.out.println("Item Count: " + quantityNeeded);
+        System.out.println("Qty Needed: " + quantityNeeded);
         System.out.println("Travel Time: " + travelTime);
         System.out.println("Processing Num Days: " + processingNumDays);
         System.out.println("Processing End Day: " + processingEndDay);
